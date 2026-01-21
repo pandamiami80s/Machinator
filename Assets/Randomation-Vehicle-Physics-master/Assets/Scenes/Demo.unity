@@ -2110,7 +2110,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cinemachineCamera: {fileID: 1612388382}
-  cam: {fileID: 0}
   spawnPoint: {x: 0, y: 5, z: 4}
   spawnRot: {x: -1, y: 0, z: 0}
   vehicles:
@@ -61980,6 +61979,64 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963047435}
   m_Mesh: {fileID: 4300008, guid: ab3d18e7f8353fd41aa491cf6d48aef6, type: 3}
+--- !u!1001 &968060200
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 1733f1cfc2a8fa846b3303cd875e72e3, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -14.01621
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1733f1cfc2a8fa846b3303cd875e72e3, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.2449975
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1733f1cfc2a8fa846b3303cd875e72e3, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -3.3941913
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1733f1cfc2a8fa846b3303cd875e72e3, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1733f1cfc2a8fa846b3303cd875e72e3, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1733f1cfc2a8fa846b3303cd875e72e3, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1733f1cfc2a8fa846b3303cd875e72e3, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1733f1cfc2a8fa846b3303cd875e72e3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1733f1cfc2a8fa846b3303cd875e72e3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1733f1cfc2a8fa846b3303cd875e72e3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1733f1cfc2a8fa846b3303cd875e72e3, type: 3}
+      propertyPath: m_Name
+      value: Hornet1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects:
+    - {fileID: 8164078558771037576, guid: 1733f1cfc2a8fa846b3303cd875e72e3, type: 3}
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1733f1cfc2a8fa846b3303cd875e72e3, type: 3}
 --- !u!1 &970399543
 GameObject:
   m_ObjectHideFlags: 0
@@ -120255,3 +120312,4 @@ SceneRoots:
   - {fileID: 449905056}
   - {fileID: 51209419}
   - {fileID: 1612388381}
+  - {fileID: 968060200}
