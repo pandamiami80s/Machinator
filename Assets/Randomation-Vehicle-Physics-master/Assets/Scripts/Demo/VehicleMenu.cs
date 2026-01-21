@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using Unity.Cinemachine;
 
 namespace RVP
 {
@@ -10,7 +11,10 @@ namespace RVP
     // Class for the menu in the demo
     public class VehicleMenu : MonoBehaviour
     {
-        public CameraControl cam;
+        // CInemachine
+        public CinemachineCamera cinemachineCamera;
+
+        //public CameraControl cam;
         public Vector3 spawnPoint;
         public Vector3 spawnRot;
         public GameObject[] vehicles;
@@ -25,15 +29,16 @@ namespace RVP
         public VehicleHud hud;
 
         void Update() {
-            cam.stayFlat = camToggle.isOn;
+            //cam.stayFlat = camToggle.isOn;
             chaseCarSpawnTime = Mathf.Max(0, chaseCarSpawnTime - Time.deltaTime);
         }
 
         // Spawns a vehicle from the vehicles array at the index
         public void SpawnVehicle(int vehicle) {
             newVehicle = Instantiate(vehicles[vehicle], spawnPoint, Quaternion.LookRotation(spawnRot, GlobalControl.worldUpDir)) as GameObject;
-            cam.target = newVehicle.transform;
-            cam.Initialize();
+            //cam.target = newVehicle.transform;
+            cinemachineCamera.Target.TrackingTarget = newVehicle.transform;
+            //cam.Initialize();
 
             if (newVehicle.GetComponent<VehicleAssist>()) {
                 newVehicle.GetComponent<VehicleAssist>().enabled = assistToggle.isOn;
