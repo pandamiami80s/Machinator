@@ -37,6 +37,8 @@ public class GunTurret : MonoBehaviour
         if (Physics.Raycast(ray, out hit, maxAimDistance, aimLayers))
         {
             targetPoint = hit.point; // Hit an object
+
+           
         }
         else
         {
@@ -73,6 +75,16 @@ public class GunTurret : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             Debug.DrawLine(verticalTransform.position, targetPoint, Color.yellow, 1.0f);
+
+
+
+            IDamageable damageable = hit.collider.GetComponent<IDamageable>();
+
+            if (damageable != null)
+            {
+                damageable.TakeDamage(25);
+
+            }
         }
     
     }
