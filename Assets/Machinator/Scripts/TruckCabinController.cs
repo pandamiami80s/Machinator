@@ -1,9 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
-
-using System.Collections.Generic;
-using UnityEngine;
 using System;
+
+// создать empty для каждого сchild
+// remove any anim clip
 
 
 
@@ -24,51 +24,60 @@ public class TruckCabinController : MonoBehaviour
     public List<CabinPartGroup> parts = new List<CabinPartGroup>();
     public EntityHealth globalHealth;
 
-    public void SetupWithCollidersOnMeshes(string filterName)
+    // Метод для глубокого поиска
+    public void SetupDeepHierarchy(string filterName)
     {
         parts.Clear();
         int partIndex = 0;
 
-        foreach (Transform emptyTransform in transform)
+        // Находим вообще ВСЕ объекты в детях МАШИНЫ
+        Transform[] allChildren = GetComponentsInChildren<Transform>(true);
+
+        foreach (Transform t in allChildren)
         {
-            // Ищем объекты по фильтру (например, Empty1, Empty2...)
-            if (emptyTransform.name.Contains(filterName))
+            // Нам нужны только те, чье имя содержит "Empty"
+            // Но мы исключаем сам корень и проверяем, есть ли внутри дети (меши)
+            if (t.name.Contains(filterName) && t != transform && t.childCount > 0)
             {
-                CabinPartGroup newGroup = new CabinPartGroup();
-                newGroup.name = emptyTransform.name;
-
-                int stagesCount = emptyTransform.childCount;
-                newGroup.stages = new GameObject[stagesCount];
-
-                for (int i = 0; i < stagesCount; i++)
+                // Проверяем, что это именно "Родитель запчасти" (в нем должны быть меши, а не другие Empty)
+                // Если первый ребенок имеет меш, значит это наша цель
+                if (t.GetChild(0).GetComponent<MeshFilter>() != null || t.GetChild(0).name.ToLower().Contains("poly"))
                 {
-                    GameObject stageObj = emptyTransform.GetChild(i).gameObject;
-                    newGroup.stages[i] = stageObj;
+                    CabinPartGroup newGroup = new CabinPartGroup();
+                    newGroup.name = t.name;
 
-                    // --- НАСТРОЙКА МЕША ---
+                    int stagesCount = t.childCount;
+                    newGroup.stages = new GameObject[stagesCount];
 
-                    // Удаляем старые ресиверы, если есть
-                    foreach (var old in stageObj.GetComponents<DamageReceiver>())
-                        DestroyImmediate(old);
+                    for (int i = 0; i < stagesCount; i++)
+                    {
+                        GameObject stageObj = t.GetChild(i).gameObject;
+                        newGroup.stages[i] = stageObj;
 
-                    // Добавляем DamageReceiver прямо на меш
-                    DamageReceiver dr = stageObj.AddComponent<DamageReceiver>();
-                    dr.partIndex = partIndex; // Один индекс на все 3 стадии этой части
+                        // Настройка DamageReceiver и MeshCollider на меш
+                        SetupMeshObject(stageObj, partIndex);
 
-                    // Добавляем MeshCollider, если его нет
-                    MeshCollider mc = stageObj.GetComponent<MeshCollider>();
-                    if (mc == null) mc = stageObj.AddComponent<MeshCollider>();
-                    mc.convex = true; // Обязательно для обнаружения столкновений пулями
+                        stageObj.SetActive(i == 0);
+                    }
 
-                    // Включаем только первую модель
-                    stageObj.SetActive(i == 0);
+                    parts.Add(newGroup);
+                    partIndex++;
                 }
-
-                parts.Add(newGroup);
-                partIndex++;
             }
         }
-        Debug.Log($"Настройка завершена! Объектов Empty: {partIndex}. Коллайдеры и ресиверы на мешах.");
+        Debug.Log($"<color=green>Успех!</color> В глубокой иерархии найдено {partIndex} частей.");
+    }
+
+    private void SetupMeshObject(GameObject obj, int index)
+    {
+        foreach (var old in obj.GetComponents<DamageReceiver>()) DestroyImmediate(old);
+
+        DamageReceiver dr = obj.AddComponent<DamageReceiver>();
+        dr.partIndex = index;
+
+        MeshCollider mc = obj.GetComponent<MeshCollider>();
+        if (mc == null) mc = obj.AddComponent<MeshCollider>();
+        mc.convex = true;
     }
 
     public void DamagePart(int index, float damage)
@@ -76,21 +85,37 @@ public class TruckCabinController : MonoBehaviour
         if (index < 0 || index >= parts.Count) return;
 
         CabinPartGroup part = parts[index];
-        // Если уже на последней стадии и HP кончилось - выходим
-        if (part.currentStageIndex >= part.stages.Length - 1 && part.health <= 0) return;
 
-        part.health -= damage;
-        if (globalHealth != null) globalHealth.AddGlobalDamage(damage);
+        // Вычисляем финальный урон с учетом брони
+        float finalDamage = damage;
 
-        // Переключение стадий (0 -> 1 -> 2)
-        int targetStage = 2 - Mathf.CeilToInt(part.health / 33.4f);
-        targetStage = Mathf.Clamp(targetStage, 0, part.stages.Length - 1);
-
-        if (targetStage > part.currentStageIndex)
+        // Допустим, стадии 0 и 1 — это наличие брони
+        // Если текущая стадия меньше 2, снижаем урон на 30%
+        if (part.currentStageIndex < 2)
         {
-            part.stages[part.currentStageIndex].SetActive(false);
-            part.currentStageIndex = targetStage;
-            part.stages[targetStage].SetActive(true);
+            finalDamage *= 0.7f; // Умножаем на 0.7 (проходит только 70% урона)
+        }
+
+        // Применяем урон
+        part.health -= finalDamage;
+
+        if (globalHealth != null)
+        {
+            globalHealth.AddGlobalDamage(finalDamage);
+        }
+
+        // Проверяем, не пора ли сменить стадию визуально
+        if (part.currentStageIndex < part.stages.Length - 1)
+        {
+            int targetStage = 2 - Mathf.CeilToInt(part.health / 33.4f);
+            targetStage = Mathf.Clamp(targetStage, 0, part.stages.Length - 1);
+
+            if (targetStage > part.currentStageIndex)
+            {
+                part.stages[part.currentStageIndex].SetActive(false);
+                part.currentStageIndex = targetStage;
+                part.stages[targetStage].SetActive(true);
+            }
         }
     }
 }

@@ -18,7 +18,7 @@ public class TruckCabinEditor : Editor
         if (GUILayout.Button("SETUP: Colliders on Meshes"))
         {
             Undo.RecordObject(script, "Setup Colliders on Meshes");
-            script.SetupWithCollidersOnMeshes(filter);
+            script.SetupDeepHierarchy(filter);
             EditorUtility.SetDirty(script);
         }
     }
