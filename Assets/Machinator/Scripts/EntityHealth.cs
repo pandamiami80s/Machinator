@@ -1,14 +1,14 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Collider))]
+//[RequireComponent(typeof(Collider))]
 public class EntityHealth : MonoBehaviour, IDamageable
 {
-    public int health = 100;
+    public float health = 100;
     ///int currentHealth;
 
 
 
-    public void TakeDamage(int amount)
+    public void AddGlobalDamage(float amount)
     {
         health -= amount;
 
@@ -19,5 +19,10 @@ public class EntityHealth : MonoBehaviour, IDamageable
         {
             Debug.Log("Health depleted");
         }
+    }
+
+    public void ApplyDamage(float amount)
+    {
+        throw new System.NotImplementedException();
     }
 }

@@ -82,7 +82,7 @@ public class GunTurret : MonoBehaviour
 
             if (damageable != null)
             {
-                damageable.TakeDamage(25);
+                damageable.ApplyDamage(25);
 
             }
         }
