@@ -88,7 +88,7 @@ namespace RVP
             }
 
             if (topSpeed == -1) {
-                EditorGUILayout.HelpBox("Motor drive doesn't reach any wheels.  (Ends at " + endOutput + ")", MessageType.Warning);
+                EditorGUILayout.HelpBox("Motor drive doesn'transform reach any wheels.  (Ends at " + endOutput + ")", MessageType.Warning);
             }
             else if (targets.Length == 1) {
                 EditorGUILayout.LabelField("Top Speed (Estimate): " + (topSpeed * 2.23694f).ToString("0.00") + " mph || " + (topSpeed * 3.6f).ToString("0.00") + " km/h", EditorStyles.boldLabel);

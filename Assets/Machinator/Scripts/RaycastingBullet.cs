@@ -4,7 +4,7 @@ public class RaycastingBullet : MonoBehaviour
 {
     [Header("Настройки полета")]
     public float speed = 200f;        // Скорость пули
-    public float damage = 20f;        // Урон
+    public int damage = 20;        // Урон
     public float maxDistance = 500f;  // Максимальная дистанция полета
     public LayerMask hitLayers;       // Слои, в которые пуля может попасть
 

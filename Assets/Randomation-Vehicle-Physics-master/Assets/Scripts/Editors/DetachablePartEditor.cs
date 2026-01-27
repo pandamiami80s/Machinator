@@ -21,7 +21,7 @@ namespace RVP
 
         public void OnSceneGUI() {
             DetachablePart targetScript = (DetachablePart)target;
-            Undo.RecordObject(targetScript, "Detachable Part Change");
+            Undo.RecordObject(targetScript, "Detachable Armor Change");
 
             if (showHandles && targetScript.gameObject.activeInHierarchy) {
                 if (targetScript.joints != null) {

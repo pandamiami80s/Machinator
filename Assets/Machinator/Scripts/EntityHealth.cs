@@ -8,7 +8,7 @@ public class EntityHealth : MonoBehaviour, IDamageable
 
 
 
-    public void AddGlobalDamage(float amount)
+    public void AddGlobalDamage(int amount)
     {
         health -= amount;
 
@@ -21,7 +21,7 @@ public class EntityHealth : MonoBehaviour, IDamageable
         }
     }
 
-    public void ApplyDamage(float amount)
+    public void ApplyDamage(int amount)
     {
         throw new System.NotImplementedException();
     }

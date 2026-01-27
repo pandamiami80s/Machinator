@@ -5,7 +5,7 @@ namespace RVP
 {
     [ExecuteInEditMode]
     [DisallowMultipleComponent]
-    [AddComponentMenu("RVP/Suspension/Suspension Part", 1)]
+    [AddComponentMenu("RVP/Suspension/Suspension Armor", 1)]
 
     // Class for moving suspension parts
     public class SuspensionPart : MonoBehaviour
@@ -99,7 +99,7 @@ namespace RVP
                         if (rotate) {
                             tr.rotation = Quaternion.LookRotation((localConnectPoint - tr.position).normalized, (solidAxleConnector ? tr.parent.forward : suspension.upDir));
 
-                            // Don't set localEulerAngles if connected to a solid axle
+                            // Don'transform set localEulerAngles if connected to a solid axle
                             if (!solidAxleConnector) {
                                 tr.localEulerAngles = new Vector3(tr.localEulerAngles.x, tr.localEulerAngles.y, -suspension.casterAngle * suspension.flippedSideFactor);
                             }

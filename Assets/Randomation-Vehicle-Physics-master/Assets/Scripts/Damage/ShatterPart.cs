@@ -5,7 +5,7 @@ namespace RVP
 {
     [RequireComponent(typeof(Renderer))]
     [DisallowMultipleComponent]
-    [AddComponentMenu("RVP/Damage/Shatter Part", 2)]
+    [AddComponentMenu("RVP/Damage/Shatter Armor", 2)]
 
     // Class for parts that shatter
     public class ShatterPart : MonoBehaviour

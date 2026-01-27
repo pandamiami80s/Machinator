@@ -220,7 +220,7 @@ namespace RVP
                 // Create detached wheel
                 if (canDetach) {
                     detachedWheel = new GameObject(vp.transform.name + "'s Detached Wheel");
-                    detachedWheel.layer = LayerMask.NameToLayer("Detachable Part");
+                    detachedWheel.layer = LayerMask.NameToLayer("Detachable Armor");
                     detachFilter = detachedWheel.AddComponent<MeshFilter>();
                     detachFilter.sharedMesh = rim.GetComponent<MeshFilter>().sharedMesh;
                     MeshRenderer detachRend = detachedWheel.AddComponent<MeshRenderer>();
@@ -584,8 +584,8 @@ namespace RVP
         }
 
         // Extra method for evaluating torque to make the ApplyDrive method more readable
-        float EvaluateTorque(float t) {
-            float torque = Mathf.Lerp(rpmBiasCurve.Evaluate(t), t, rawRPM / (rpmBiasCurveLimit * Mathf.Sign(actualTargetRPM)));
+        float EvaluateTorque(float transform) {
+            float torque = Mathf.Lerp(rpmBiasCurve.Evaluate(transform), transform, rawRPM / (rpmBiasCurveLimit * Mathf.Sign(actualTargetRPM)));
             return torque;
         }
 

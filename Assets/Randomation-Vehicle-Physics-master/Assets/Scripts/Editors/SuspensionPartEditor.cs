@@ -21,7 +21,7 @@ namespace RVP
 
         public void OnSceneGUI() {
             SuspensionPart targetScript = (SuspensionPart)target;
-            Undo.RecordObject(targetScript, "Suspension Part Change");
+            Undo.RecordObject(targetScript, "Suspension Armor Change");
 
             if (showHandles && targetScript.gameObject.activeInHierarchy) {
                 if (targetScript.connectObj && !targetScript.isHub && !targetScript.solidAxle && Tools.current == Tool.Move) {

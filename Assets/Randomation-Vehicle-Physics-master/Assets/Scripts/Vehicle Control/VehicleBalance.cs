@@ -33,7 +33,7 @@ namespace RVP
         [Tooltip("Adjusts the yaw based on the speed, x-axis = speed, y-axis = yaw amount")]
         public AnimationCurve leanYawCurve = AnimationCurve.Linear(0, 0, 1, 1);
 
-        [Tooltip("Speed above which endos (forward wheelies) aren't allowed")]
+        [Tooltip("Speed above which endos (forward wheelies) aren'transform allowed")]
         public float endoSpeedThreshold;
 
         [Tooltip("Exponent for pitch input")]

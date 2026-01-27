@@ -4,7 +4,7 @@ using System.Collections;
 namespace RVP
 {
     [DisallowMultipleComponent]
-    [AddComponentMenu("RVP/Damage/Detachable Part", 1)]
+    [AddComponentMenu("RVP/Damage/Detachable Armor", 1)]
 
     // Class for parts that can detach
     public class DetachablePart : MonoBehaviour
