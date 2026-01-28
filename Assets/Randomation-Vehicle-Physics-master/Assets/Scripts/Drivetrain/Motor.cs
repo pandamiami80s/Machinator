@@ -18,8 +18,8 @@ namespace RVP
 
         [Header("Engine Audio")]
 
-        public float minPitch;
-        public float maxPitch;
+        public float minX;
+        public float maxX;
         [System.NonSerialized]
         public float targetPitch;
         protected float pitchFactor;
@@ -60,7 +60,7 @@ namespace RVP
             // Get engine sound
             snd = GetComponent<AudioSource>();
             if (snd) {
-                snd.pitch = minPitch;
+                snd.pitch = minX;
             }
 
             // Get boost sound
@@ -130,7 +130,7 @@ namespace RVP
             if (snd) {
                 if (ignition && health > 0) {
                     snd.enabled = true;
-                    snd.pitch = Mathf.Lerp(snd.pitch, Mathf.Lerp(minPitch, maxPitch, targetPitch), 20 * Time.deltaTime) + Mathf.Sin(Time.time * 200 * (1 - health)) * (1 - health) * 0.1f * damagePitchWiggle;
+                    snd.pitch = Mathf.Lerp(snd.pitch, Mathf.Lerp(minX, maxX, targetPitch), 20 * Time.deltaTime) + Mathf.Sin(Time.time * 200 * (1 - health)) * (1 - health) * 0.1f * damagePitchWiggle;
                     snd.volume = Mathf.Lerp(snd.volume, 0.3f + targetPitch * 0.7f, 20 * Time.deltaTime);
                 }
                 else {

@@ -1,7 +1,8 @@
 using System.Drawing;
 using UnityEngine;
 
-public class Weapon : MonoBehaviour
+// act as waepon
+public class Turret : MonoBehaviour
 {
     public float fireRate = 0.5f;     // Скорость стрельбы
     public GameObject bulletPrefab;   // Пуля

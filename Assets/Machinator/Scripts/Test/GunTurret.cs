@@ -5,8 +5,8 @@ public class GunTurret : MonoBehaviour
     public Transform verticalTransform;
     Transform cameraTransform;
     public float rotationSpeed = 8.0f;
-    public float minPitch = -5.0f;
-    public float maxPitch = 5.0f;
+    public float minX = -5.0f;
+    public float maxX = 5.0f;
 
     public Transform nozzle;
     public float range = 10.0f;
@@ -49,12 +49,12 @@ public class GunTurret : MonoBehaviour
         // Find direction from turret base to the target point
         Vector3 dirToTarget = targetPoint - transform.position;
         // Convert that direction into the vehicle's local space
-        Vector3 localDir = transform.parent.InverseTransformDirection(dirToTarget);
-        localDir.y = 0; // Flatten it to the horizontal plane
+        Vector3 localDirection = transform.parent.InverseTransformDirection(dirToTarget);
+        localDirection.y = 0; // Flatten it to the horizontal plane
 
-        if (localDir != Vector3.zero)
+        if (localDirection != Vector3.zero)
         {
-            Quaternion targetRotationY = Quaternion.LookRotation(localDir);
+            Quaternion targetRotationY = Quaternion.LookRotation(localDirection);
             transform.localRotation = Quaternion.Slerp(transform.localRotation, targetRotationY, Time.deltaTime * rotationSpeed);
         }
 
@@ -66,7 +66,7 @@ public class GunTurret : MonoBehaviour
 
         // Calculate the pitch angle
         float targetPitch = -Mathf.Atan2(localDirVert.y, localDirVert.z) * Mathf.Rad2Deg;
-        targetPitch = Mathf.Clamp(targetPitch, minPitch, maxPitch);
+        targetPitch = Mathf.Clamp(targetPitch, minX, maxX);
 
         Quaternion targetRotationX = Quaternion.Euler(targetPitch, 0, 0);
         verticalTransform.localRotation = Quaternion.Slerp(verticalTransform.localRotation, targetRotationX, Time.deltaTime * rotationSpeed);

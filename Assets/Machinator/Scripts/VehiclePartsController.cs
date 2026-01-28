@@ -137,10 +137,10 @@ public class VehiclePartsController : MonoBehaviour
                 GameObject child = parent.GetChild(i).gameObject;
                 Undo.RegisterFullObjectHierarchyUndo(child, "Setup Vehicle Parts B");
 
-                if (!child.GetComponent<VehiclePart>())
+                if (!child.GetComponent<VehicleArmorPart>())
                 {
-                    VehiclePart vehiclePart = child.AddComponent<VehiclePart>();
-                    vehiclePart.vehiclePartsController = this;
+                    VehicleArmorPart vehicleArmorPart = child.AddComponent<VehicleArmorPart>();
+                    vehicleArmorPart.vehiclePartsController = this;
                 }
                 if (!child.GetComponent<MeshCollider>())
                 {

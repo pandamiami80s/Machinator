@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class VehiclePart : MonoBehaviour, IDamageable
+public class VehicleArmorPart : MonoBehaviour, IDamageable
 {
     public VehiclePartsController vehiclePartsController;
     public int armor;
