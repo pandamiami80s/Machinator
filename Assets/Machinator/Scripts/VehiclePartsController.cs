@@ -2,10 +2,24 @@ using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
 using System;
+using RVP;
+using UnityEngine.SocialPlatforms;
+using System.Text.RegularExpressions;
+using System.Linq;
+using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 
 /// <summary>
 /// 2026 01 27
 ///     Can add fucntion to just create and plus fill properties
+///     Export settings for blender: 
+///         Scale: 1.0
+///         Apply settings: All local
+///         Forward: -Z Forward
+///         Up: Y up
+///         Apply Unit
+///         Use Space Transform
+///         Apply Transform
 /// </summary>
 
 [Serializable]
@@ -23,8 +37,21 @@ public class Armor
 
 
 
+// find LP_CAB
+// put cab
+// and cargo
+// set coordinates
+
+
+
+
 public class VehiclePartsController : MonoBehaviour
 {
+  
+
+
+
+
     public EntityHealth entityHealth;
     public int armor = 75;
 
@@ -32,36 +59,119 @@ public class VehiclePartsController : MonoBehaviour
     // Store states in one place
     public List<ArmorPart> armorParts = new List<ArmorPart>();
 
-    
 
-    /// <summary>
-    /// Set coordinates for CAB AND CARGO/BASKET if presented
-    /// </summary>
-    /// <param name="lpCab"></param>
-    /// <param name="lpCargo"></param>
-    public void SetPartsCoordinates(string lpCab, string lpCargo)
+
+
+
+
+    private Dictionary<string, string> partMap = new Dictionary<string, string>()
     {
-        string[] parentNames = { lpCab, lpCargo };
-        int partCount = 0;
-
-        foreach (string parentName in parentNames)
+        { "LP_CAB", "cab" },
+        { "LP_BSK", "cargo" }
+    };
+    public void SetCabCargo()
+    {
+        Transform[] allTransforms = transform.GetComponentsInChildren<Transform>(true);
+        // LP_CAB
+        foreach (string lpName in partMap.Keys)
         {
-            Transform[] transforms = transform.GetComponentsInChildren<Transform>();
-            foreach (Transform child in transforms)
+            foreach (Transform tr in allTransforms)
             {
-                Transform parent = child.parent;
-                if (parent != null && parent.name.Contains(parentName))
+                // LP_CAB OBJ FOUNDED
+                if (tr.name.Contains(lpName))
                 {
-                    Undo.RecordObject(child, "Set Parts Coordinates");
-                    child.localPosition = Vector3.zero;
+                    Debug.Log(tr.name);
 
-                    partCount++;
+                    // Store // find cabs
+                    foreach (Transform trB in allTransforms)
+                    {
+
+
+                        if (trB.name.Contains(partMap[lpName]))
+                        {
+
+                            Undo.SetTransformParent(trB, tr, "Move Part");
+                            trB.localPosition = Vector3.zero;
+
+
+                            //par.Add(tr);
+
+
+
+
+                        }
+                    }
                 }
             }
         }
-
-        Debug.Log($"<color=yellow>Coordinates set!</color> searched {partCount} load point(s)");
     }
+
+
+    private Dictionary<string, string> partMapB = new Dictionary<string, string>()
+    {
+        //{ "LP_CAB", "cab" },
+        //{ "LP_BSK", "cargo" }//,
+        { "LP_SSP", "suspension" },
+        { "LP_WHL", "wheel" }
+    };
+
+    public void SetPartsCoordinates()
+    {
+        Transform[] allTransforms = transform.GetComponentsInChildren<Transform>(true);
+        List<Transform> usedTransforms = new List<Transform>();
+
+        foreach (var pair in partMapB)
+        {
+            foreach (Transform trLP in allTransforms)
+            {
+                // Find LP
+                if (trLP.name.Contains(pair.Key))
+                {
+                    // Get num val "02
+                    string index = Regex.Match(trLP.name, @"\d+").Value;
+
+                    foreach (Transform trPart in allTransforms)
+                    {
+                        // 3. Условия: 
+                        // - Имя содержит нужную деталь (wheel)
+                        // - Имя содержит тот же индекс (02)
+                        // - Не использовано ранее и не является самим LP
+                        if (trPart.name.Contains(pair.Value) &&
+                            trPart.name.Contains(index) &&
+                            !usedTransforms.Contains(trPart) &&
+                            trPart != trLP)
+                        {
+                            Undo.SetTransformParent(trPart, trLP, "Move Part");
+                            trPart.localPosition = Vector3.zero;
+                            trPart.localRotation = Quaternion.identity;
+
+                            usedTransforms.Add(trPart);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Helper: Extracts digits. "LP_WHL02L" returns "02". "Cab" returns "".
+    private string GetNumbers(string input)
+    {
+        Match match = Regex.Match(input, @"\d+");
+        return match.Success ? match.Value : "";
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
     /// <summary>
     /// Set vehicle model to any damaged state

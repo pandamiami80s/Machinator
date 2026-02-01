@@ -970,8 +970,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  minPitch: 0.5
-  maxPitch: 1.5
+  minX: 0
+  maxX: 0
   canBoost: 1
   boost: 1
   boostPowerCurve:
@@ -2131,7 +2131,7 @@ MonoBehaviour:
   - {fileID: 115446, guid: 0b6034f064e46714eb4001397782827b, type: 3}
   - {fileID: 101268, guid: 2038051458b0cee4291c6aafd9e1df76, type: 3}
   - {fileID: 101516, guid: 8709d84233fe94e4e896ff9a06c9d335, type: 3}
-  - {fileID: 127608, guid: 044017381f01f0f448f62ec8606a4f94, type: 3}
+  - {fileID: 127608, guid: c3715ffb60f8f15429144177a9f9a477, type: 3}
   chaseVehicle: {fileID: 127608, guid: 3283a092188e0884890ce0766632257e, type: 3}
   chaseVehicleDamage: {fileID: 101268, guid: 94d046b711c35d34ba4c8b710ef98882, type: 3}
   autoShiftToggle: {fileID: 1228937126}
@@ -2464,8 +2464,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  minPitch: 0.5
-  maxPitch: 1.5
+  minX: 0
+  maxX: 0
   canBoost: 1
   boost: 1
   boostPowerCurve:
@@ -3443,8 +3443,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  minPitch: 0.5
-  maxPitch: 1.5
+  minX: 0
+  maxX: 0
   canBoost: 1
   boost: 1
   boostPowerCurve:
@@ -11075,8 +11075,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  minPitch: 0.5
-  maxPitch: 1.5
+  minX: 0
+  maxX: 0
   canBoost: 1
   boost: 1
   boostPowerCurve:
@@ -11826,8 +11826,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  minPitch: 0.5
-  maxPitch: 1.5
+  minX: 0
+  maxX: 0
   canBoost: 1
   boost: 1
   boostPowerCurve:
@@ -47777,8 +47777,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  minPitch: 0.5
-  maxPitch: 1.5
+  minX: 0
+  maxX: 0
   canBoost: 1
   boost: 1
   boostPowerCurve:
@@ -55082,8 +55082,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  minPitch: 0.5
-  maxPitch: 1.5
+  minX: 0
+  maxX: 0
   canBoost: 1
   boost: 1
   boostPowerCurve:
@@ -77403,8 +77403,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  minPitch: 0.5
-  maxPitch: 1.5
+  minX: 0
+  maxX: 0
   canBoost: 1
   boost: 1
   boostPowerCurve:
@@ -88136,8 +88136,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  minPitch: 0.5
-  maxPitch: 1.5
+  minX: 0
+  maxX: 0
   canBoost: 1
   boost: 1
   boostPowerCurve:

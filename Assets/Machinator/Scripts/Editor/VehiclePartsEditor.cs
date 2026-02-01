@@ -5,11 +5,21 @@ using UnityEditor;
 /// 2026 01 27
 /// </summary>
 
+
+
+
+
 [CustomEditor(typeof(VehiclePartsController))]
 public class VehiclePartsEditor : Editor
 {
+    
+
+
+    string chassis = "Chassis";
     string lpCab = "LP_CAB";
     string lpCargo = "LP_BSK";
+    string lpSuspension = "LP_SSP";
+    string lpWheel = "LP_WHL";
     string partParent = "Empty";
     int partIndex = 0;
     
@@ -28,9 +38,27 @@ public class VehiclePartsEditor : Editor
         lpCab = EditorGUILayout.TextField("Load Point Cab Name", lpCab);
         lpCargo = EditorGUILayout.TextField("Load Point Cargo Name", lpCargo);
         GUI.backgroundColor = Color.yellow;
+
+
+
+
+
         if (GUILayout.Button("Set coordinates"))
         {
-            vehiclePartsController.SetPartsCoordinates(lpCab, lpCargo);
+            vehiclePartsController.SetCabCargo();
+
+            // Save changes on the scene
+            EditorUtility.SetDirty(vehiclePartsController);
+        }
+
+
+
+
+
+
+        if (GUILayout.Button("Set coordinates"))
+        {
+            vehiclePartsController.SetPartsCoordinates();
 
             // Save changes on the scene
             EditorUtility.SetDirty(vehiclePartsController);
@@ -38,6 +66,16 @@ public class VehiclePartsEditor : Editor
 
         GUI.backgroundColor = Color.white;
         GUILayout.Space(10);
+
+
+
+
+
+
+
+
+
+
 
         // Set models
         partParent = EditorGUILayout.TextField("Armor Parent Name", partParent);

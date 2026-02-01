@@ -1,14 +1,9 @@
 fileFormatVersion: 2
-guid: 1f2a475157014864296a551e59130ed2
+guid: a151a936c1c63b54887b20d91cdf8cbe
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: shassis_1_0
-    second: {fileID: 2100000, guid: bc014d3569d95c949b11b563a3716ad5, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0
