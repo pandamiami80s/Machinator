@@ -54,5 +54,11 @@ public class VehiclePartsEditor : Editor
             vehiclePartsController.ShowCabCargoBreakablesByIndex(breakableIndex);
             EditorUtility.SetDirty(vehiclePartsController);
         }
+
+        if (GUILayout.Button("Hide Suspension And Wheels"))
+        {
+            vehiclePartsController.HideSuspensionAndWheels();
+            EditorUtility.SetDirty(vehiclePartsController);
+        }
     }
 }
