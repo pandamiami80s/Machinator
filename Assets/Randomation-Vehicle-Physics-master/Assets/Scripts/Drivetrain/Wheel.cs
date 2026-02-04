@@ -220,7 +220,7 @@ namespace RVP
                 // Create detached wheel
                 if (canDetach) {
                     detachedWheel = new GameObject(vp.transform.name + "'s Detached Wheel");
-                    detachedWheel.layer = LayerMask.NameToLayer("Detachable Armor");
+                    detachedWheel.layer = LayerMask.NameToLayer("Detachable Part");
                     detachFilter = detachedWheel.AddComponent<MeshFilter>();
                     detachFilter.sharedMesh = rim.GetComponent<MeshFilter>().sharedMesh;
                     MeshRenderer detachRend = detachedWheel.AddComponent<MeshRenderer>();

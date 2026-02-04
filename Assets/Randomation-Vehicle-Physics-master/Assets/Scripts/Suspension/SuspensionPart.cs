@@ -5,7 +5,7 @@ namespace RVP
 {
     [ExecuteInEditMode]
     [DisallowMultipleComponent]
-    [AddComponentMenu("RVP/Suspension/Suspension Armor", 1)]
+    [AddComponentMenu("RVP/Suspension/Suspension Part", 1)]
 
     // Class for moving suspension parts
     public class SuspensionPart : MonoBehaviour

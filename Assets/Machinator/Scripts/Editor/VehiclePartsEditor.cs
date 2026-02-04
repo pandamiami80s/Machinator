@@ -2,30 +2,18 @@ using UnityEngine;
 using UnityEditor;
 
 /// <summary>
-/// 2026 01 27
+/// 2026 02 04
 /// </summary>
-
-
-
-
 
 [CustomEditor(typeof(VehiclePartsController))]
 public class VehiclePartsEditor : Editor
 {
-    
-
-
-    string chassis = "Chassis";
-    string lpCab = "LP_CAB";
-    string lpCargo = "LP_BSK";
-    string lpSuspension = "LP_SSP";
-    string lpWheel = "LP_WHL";
-    string partParent = "Empty";
-    int partIndex = 0;
-    
-
     // Not to run in OnInspectorGUI every time
     VehiclePartsController vehiclePartsController => (VehiclePartsController)target;
+    int cabIndex;
+    int cargoIndex;
+    int breakableIndex;
+
 
     public override void OnInspectorGUI()
     {
@@ -33,69 +21,37 @@ public class VehiclePartsEditor : Editor
         DrawDefaultInspector();
 
         GUILayout.Space(10);
-
-        // Set coordinates
-        lpCab = EditorGUILayout.TextField("Load Point Cab Name", lpCab);
-        lpCargo = EditorGUILayout.TextField("Load Point Cargo Name", lpCargo);
         GUI.backgroundColor = Color.yellow;
-
-
-
-
-
-        if (GUILayout.Button("Set coordinates"))
+        if (GUILayout.Button("Set Cab and Cargo"))
         {
-            vehiclePartsController.SetCabCargo();
-
-            // Save changes on the scene
+            vehiclePartsController.SetCabAndCargo();
             EditorUtility.SetDirty(vehiclePartsController);
         }
 
-
-
-
-
-
-        if (GUILayout.Button("Set coordinates"))
+        if (GUILayout.Button("Set Suspension And Wheels"))
         {
-            vehiclePartsController.SetPartsCoordinates();
+            vehiclePartsController.SetSuspensionAndWheels();
+            EditorUtility.SetDirty(vehiclePartsController);
+        }
 
-            // Save changes on the scene
+        GUILayout.Space(10);
+        GUILayout.Label("Debug");
+        GUI.backgroundColor = Color.white;
+        cabIndex = EditorGUILayout.IntField("Cab index", cabIndex);
+        cargoIndex = EditorGUILayout.IntField("Cargo index", cargoIndex);
+        GUI.backgroundColor = Color.red;
+        if (GUILayout.Button("Show Cab and Cargo by Index"))
+        {
+            vehiclePartsController.ShowCabCargoByIndex(cabIndex, cargoIndex);
             EditorUtility.SetDirty(vehiclePartsController);
         }
 
         GUI.backgroundColor = Color.white;
-        GUILayout.Space(10);
-
-
-
-
-
-
-
-
-
-
-
-        // Set models
-        partParent = EditorGUILayout.TextField("Armor Parent Name", partParent);
-        partIndex = EditorGUILayout.IntField("Armor Index", partIndex);
-        GUI.backgroundColor = Color.green;
-        if (GUILayout.Button("Set vehicle model"))
-        {
-            vehiclePartsController.SetupVehicleModel(partParent, partIndex);
-            
-            // Save changes on the scene
-            EditorUtility.SetDirty(vehiclePartsController);
-        }
-
-        // Set vehicle parts
+        breakableIndex = EditorGUILayout.IntField("Breakable index", breakableIndex);
         GUI.backgroundColor = Color.red;
-        if (GUILayout.Button("Set vehicle parts"))
+        if (GUILayout.Button("Show Cab and Cargo Breakables by Index"))
         {
-            vehiclePartsController.SetupVehicleParts(partParent);
-
-            // Save changes on the scene
+            vehiclePartsController.ShowCabCargoBreakablesByIndex(breakableIndex);
             EditorUtility.SetDirty(vehiclePartsController);
         }
     }
