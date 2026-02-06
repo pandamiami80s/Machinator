@@ -25,6 +25,12 @@ public class CabCargoEditor : Editor
             EditorUtility.SetDirty(cabCargoController);
         }
 
+        if (GUILayout.Button("Set Turrets"))
+        {
+            cabCargoController.SetTurrets();
+            EditorUtility.SetDirty(cabCargoController);
+        }
+
         // Debug part (If brekables list is full)
         GUILayout.Space(10);
         GUILayout.Label("Debug");
@@ -36,6 +42,7 @@ public class CabCargoEditor : Editor
             cabCargoController.ShowBreakablesByIndex(breakableIndex);
             EditorUtility.SetDirty(cabCargoController);
         }
+
         if (GUILayout.Button("Show Cab and Cargo All Breakables"))
         {
             cabCargoController.ShowAllBreakables();

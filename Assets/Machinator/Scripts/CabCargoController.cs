@@ -27,6 +27,9 @@ public class CabCargoController : MonoBehaviour
     public List<Breakable> breakables = new List<Breakable>();
     // Or Empty...
     string parentName = "Breakable";
+    // Maybe list or class with LP type in future
+    public List<Transform> turretLPs = new List<Transform>();
+    string lpTurret = "LP_SML" ;
 
 
 
@@ -82,6 +85,29 @@ public class CabCargoController : MonoBehaviour
             breakables.Add(breakable);
         }
         Debug.Log($"<color=green>Setup Complete:</color> {breakables.Count} parents found");
+    }
+
+    public void SetTurrets()
+    {
+        Undo.RecordObject(this, "Set Turrets");
+
+        turretLPs.Clear();
+
+
+
+        // look at cargo
+
+        // add turret slot script to LP use empty gameobject
+        
+        
+        Transform[] allTransforms = transform.GetComponentsInChildren<Transform>(true);
+        foreach (Transform transform in allTransforms)
+        {
+            if (transform.name.Contains(lpTurret))
+            {
+                turretLPs.Add(transform);
+            }
+        }
     }
 
     public void ShowBreakablesByIndex(int index)

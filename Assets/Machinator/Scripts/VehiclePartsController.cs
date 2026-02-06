@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
-using UnityEngine.UIElements;
 using System.Text.RegularExpressions;
 
 /// <summary>
@@ -20,6 +19,7 @@ using System.Text.RegularExpressions;
 
 
 // SPAWN CAB IRL
+// SPAWN TURRET
 // Put tires to real prefab
 // Undo actions
 
@@ -52,6 +52,9 @@ public class VehiclePartsController : MonoBehaviour
         { "LP_SSP", "suspension" },
         { "LP_WHL", "wheel" }
     };
+
+    public List<GameObject> cabPrefabs = new List<GameObject>();
+    public List<GameObject> cargoPrefabs = new List<GameObject>();
 
 
 
@@ -203,5 +206,34 @@ public class VehiclePartsController : MonoBehaviour
                 }
             }
         }
+    }
+
+
+
+
+    public void SpawnCab(int index)
+    {
+        GameObject cab = Instantiate(cabPrefabs[index], CabCargoLPs[0].lpTransform);
+
+        // Have list of turret positinos
+        //cab.GetComponent<CabCargoController>().turretLPs[0].position = Vector3.zero;
+    }
+
+    public void SpawnWeapons()
+    {
+        // To current cab
+
+        // Call weapon from list or something global idk yet
+
+      
+
+
+
+        
+    }
+
+    public void SpawnCargo()
+    {
+
     }
 }
