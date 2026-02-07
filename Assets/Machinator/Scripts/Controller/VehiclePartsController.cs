@@ -26,13 +26,23 @@ using System.Text.RegularExpressions;
 
 public class VehiclePartsController : MonoBehaviour
 {
+    [Header("Prefabs")]
+    public List<GameObject> cabPrefabs = new List<GameObject>();
+    public List<GameObject> cargoPrefabs = new List<GameObject>();
+
+    [Header("Load Points")]
+    // Cab Cargo
+    [SerializeField] List<CabCargoLP> CabCargoLPs = new List<CabCargoLP>()
+    {
+        new CabCargoLP("LP_CAB", "cab", null),
+        new CabCargoLP("LP_BSK", "cargo", null)
+    };
     [System.Serializable] class CabCargoLP
     {
         public string lpName;
         public string modelName;
         public Transform lpTransform;
 
-        // Constructor to make adding items easier
         public CabCargoLP(string lp, string model, Transform transform)
         {
             lpName = lp;
@@ -40,26 +50,21 @@ public class VehiclePartsController : MonoBehaviour
             lpTransform = transform;
         }
     }
-
-    [SerializeField] List<CabCargoLP> CabCargoLPs = new List<CabCargoLP>()
-    {
-        new CabCargoLP("LP_CAB", "cab", null),
-        new CabCargoLP("LP_BSK", "cargo", null)
-    };
-
+    // Suspension
     Dictionary<string, string> lpSuspensionWheels = new Dictionary<string, string>()
     {
         { "LP_SSP", "suspension" },
         { "LP_WHL", "wheel" }
     };
+    
+    [Header("Weapons Targeting")]
+    public float distance = 100.0f;
+    public LayerMask layerMask;
 
-    public List<GameObject> cabPrefabs = new List<GameObject>();
-    public List<GameObject> cargoPrefabs = new List<GameObject>();
-
-
-
+    
+    
     /// <summary>
-    /// To do: sort by cab index name
+    /// To do: sort by cab index name for scout 03
     /// </summary>
     public void SetCabAndCargo()
     {
@@ -85,17 +90,17 @@ public class VehiclePartsController : MonoBehaviour
                             transformB.parent.GetComponent<VehiclePartsController>())
                         {
                             Undo.RegisterFullObjectHierarchyUndo(transformB, "Set Cab and Cargo");
-                            
+
                             // Put where it belongs
                             transformB.SetParent(transformA);
                             transformB.localPosition = Vector3.zero;
                             //transformB.localRotation = Quaternion.identity;
 
                             // Add script for scripts
-                            if (!transformB.gameObject.GetComponent<CabCargoController>())
+                            if (!transformB.gameObject.GetComponent<CabCargo>())
                             {
-                                CabCargoController cabCargoController = transformB.gameObject.AddComponent<CabCargoController>();
-                                cabCargoController.SetBreakables();
+                                CabCargo CabCargo = transformB.gameObject.AddComponent<CabCargo>();
+                                CabCargo.SetCabAndCargo();
                             }
                         }
                     }
@@ -138,6 +143,107 @@ public class VehiclePartsController : MonoBehaviour
         }
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public void SetTurretSlots()
+    {
+
+    }
+
+
+
+    public void SpawnCab(int index)
+    {
+        GameObject cab = Instantiate(cabPrefabs[index], CabCargoLPs[0].lpTransform);
+
+        // Have list of turret positinos
+        //cab.GetComponent<CabCargoController>().turretLPs[0].position = Vector3.zero;
+    }
+
+    public void SpawnWeapons()
+    {
+        // To current cab
+
+        // Call weapon from list or something global idk yet
+
+
+
+
+
+
+    }
+
+    public void SpawnCargo()
+    {
+
+    }
+
+    void Start()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
+
+
+    void FixedUpdate()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
+        Vector3 targetPoint;
+
+        if (Physics.Raycast(ray, out RaycastHit hit, distance, layerMask))
+        {
+            targetPoint = hit.point;
+        }
+        else
+        {
+            // Prevent loosing target when shooting at long distance / or sky
+            targetPoint = ray.GetPoint(distance);
+        }
+        
+        /// LOOK AT CAB
+        //foreach (var slot in turretSlots)
+        //{
+        // /   slot.LookAtTarget(targetPoint);
+        //}
+    }
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /// <summary>
     /// To do: // Index out of bounds
     /// </summary>
@@ -175,6 +281,11 @@ public class VehiclePartsController : MonoBehaviour
         CabCargoLPs[1].lpTransform.GetChild(cargoIndex).gameObject.SetActive(true);
     }
 
+
+
+
+
+
     public void ShowCabCargoBreakablesByIndex(int breakableIndex)
     {
         foreach (CabCargoLP cabCargoLP in CabCargoLPs)
@@ -183,57 +294,32 @@ public class VehiclePartsController : MonoBehaviour
             {
                 foreach (Transform transform in cabCargoLP.lpTransform)
                 {
-                    transform.gameObject.GetComponent<CabCargoController>().ShowBreakablesByIndex(breakableIndex);
+                    transform.gameObject.GetComponent<CabCargo>().ShowBreakablesByIndex(breakableIndex);
                 }
             }
         }
     }
 
-    /// <summary>
-    /// No undo here
-    /// </summary>
     public void HideSuspensionAndWheels()
     {
+        //  null cehck
+
         Transform[] transforms = transform.GetComponentsInChildren<Transform>(true);
         foreach (var pair in lpSuspensionWheels)
         {
             // Find "LP_"
-            foreach (Transform parent in transforms)
+            foreach (Transform transform in transforms)
             {
-                if (parent.name.Contains(pair.Key))
+                if (transform.name.Contains(pair.Key))
                 {
-                    parent.GetChild(0).gameObject.SetActive(false);
+                    Transform child = transform.GetChild(0);
+                    Undo.RegisterCompleteObjectUndo(child, "Set Cab and Cargo");
+
+                    child.gameObject.SetActive(false);
                 }
             }
         }
-    }
 
-
-
-
-    public void SpawnCab(int index)
-    {
-        GameObject cab = Instantiate(cabPrefabs[index], CabCargoLPs[0].lpTransform);
-
-        // Have list of turret positinos
-        //cab.GetComponent<CabCargoController>().turretLPs[0].position = Vector3.zero;
-    }
-
-    public void SpawnWeapons()
-    {
-        // To current cab
-
-        // Call weapon from list or something global idk yet
-
-      
-
-
-
-        
-    }
-
-    public void SpawnCargo()
-    {
 
     }
 }

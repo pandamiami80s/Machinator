@@ -5,10 +5,10 @@ using UnityEngine;
 /// 2026 02 03
 /// </summary>
 
-[CustomEditor(typeof(CabCargoController))]
+[CustomEditor(typeof(CabCargo))]
 public class CabCargoEditor : Editor
 {
-    CabCargoController cabCargoController => (CabCargoController)target;
+    CabCargo CabCargo => (CabCargo)target;
     int breakableIndex;
 
 
@@ -19,16 +19,10 @@ public class CabCargoEditor : Editor
 
         GUILayout.Space(10);
         GUI.backgroundColor = Color.yellow;
-        if (GUILayout.Button("Set Cab and Cargo Breakables"))
+        if (GUILayout.Button("Set Cab and Cargo"))
         {
-            cabCargoController.SetBreakables();
-            EditorUtility.SetDirty(cabCargoController);
-        }
-
-        if (GUILayout.Button("Set Turrets"))
-        {
-            cabCargoController.SetTurrets();
-            EditorUtility.SetDirty(cabCargoController);
+            CabCargo.SetCabAndCargo();
+            EditorUtility.SetDirty(CabCargo);
         }
 
         // Debug part (If brekables list is full)
@@ -39,14 +33,14 @@ public class CabCargoEditor : Editor
         GUI.backgroundColor = Color.red;
         if (GUILayout.Button("Show Cab and Cargo Breakables by Index"))
         {
-            cabCargoController.ShowBreakablesByIndex(breakableIndex);
-            EditorUtility.SetDirty(cabCargoController);
+            CabCargo.ShowBreakablesByIndex(breakableIndex);
+            EditorUtility.SetDirty(CabCargo);
         }
 
         if (GUILayout.Button("Show Cab and Cargo All Breakables"))
         {
-            cabCargoController.ShowAllBreakables();
-            EditorUtility.SetDirty(cabCargoController);
+            CabCargo.ShowAllBreakables();
+            EditorUtility.SetDirty(CabCargo);
         }
     }
 }

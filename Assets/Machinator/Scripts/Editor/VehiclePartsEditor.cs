@@ -34,12 +34,6 @@ public class VehiclePartsEditor : Editor
             EditorUtility.SetDirty(vehiclePartsController);
         }
 
-        if (GUILayout.Button("Set Turrets"))
-        {
-            vehiclePartsController.SetSuspensionAndWheels();
-            EditorUtility.SetDirty(vehiclePartsController);
-        }
-
         GUILayout.Space(10);
         GUILayout.Label("Debug");
         GUI.backgroundColor = Color.white;

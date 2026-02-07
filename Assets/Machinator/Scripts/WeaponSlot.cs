@@ -2,30 +2,34 @@ using UnityEditor;
 using UnityEngine;
 
 /// <summary>
-/// 2026 01 28
-///     Turret rotated in a slot along Y and X (Adjustable angles)
+/// 2026 02 07
 /// </summary>
 
-public class TurretSlot : MonoBehaviour
+public class WeaponSlot : MonoBehaviour
 {
-    public Transform turretBase;
-    public Transform turretBarrel;
+    public Weapon weapon;
 
-    // Can remove? Just for ease of use
+    [Header("Rotation")]
     public bool isRearMounted;
     public float minY = -90f;
-    public float maxY = 45f;
+    public float maxY = 90f;
     public float minX = -15.0f;
     public float maxX = 15.0f;
     Vector2 currentAngles;
     public float rotationSpeed = 90f;
-
     float gizmoDrawDistance = 2.0f;
+
+
+
+    public void GetWeapon()
+    {
+        weapon = transform.GetChild(0).GetComponent<Weapon>();
+    }
 
     public void LookAtTarget(Vector3 targetPoint)
     {
         // Get local direction to target
-        Vector3 direction = targetPoint - turretBase.position;
+        Vector3 direction = targetPoint - weapon.turretX.position;
         Vector3 localDirection = transform.InverseTransformDirection(direction);
         
         // Rear mounted case (Peacekeeper Phantom slot)
@@ -66,24 +70,19 @@ public class TurretSlot : MonoBehaviour
         {
             finalRotation = currentAngles.y;
         }
-        turretBase.localRotation = Quaternion.Euler(0, finalRotation, 0);
+        weapon.turretX.localRotation = Quaternion.Euler(0, finalRotation, 0);
 
         // Yaw
         // Inversed
         float targetPitch = -Mathf.Atan2(localDirection.y, localDirection.z) * Mathf.Rad2Deg;
         float clampedPitch = Mathf.Clamp(targetPitch, minX, maxX);
         currentAngles.x = Mathf.MoveTowards(currentAngles.x, clampedPitch, rotationSpeed * Time.fixedDeltaTime);
-        turretBarrel.localRotation = Quaternion.Euler(currentAngles.x, 0, 0);
+        weapon.turretY.localRotation = Quaternion.Euler(currentAngles.x, 0, 0);
     }
 
     //OnDrawGizmosSelected
     void OnDrawGizmos()
     {
-        if (!turretBase)
-        {
-            return;
-        }
-
         float totalAngle = maxY - minY;
         Color color = Color.red;
         if (0 < totalAngle && totalAngle <= 360.0f)
@@ -91,27 +90,27 @@ public class TurretSlot : MonoBehaviour
             color = Color.green;
         }
 
-        Vector3 forward = transform.forward;
+        Vector3 forward = Vector3.forward;
         if (isRearMounted)
         {
-            forward = -transform.forward;
+            forward = -Vector3.forward;
         }
 
         Gizmos.color = color;
         Handles.color = color;
 
-        Vector3 direction = Quaternion.AngleAxis(minY, transform.up) * forward;
-        Vector3 directionB = Quaternion.AngleAxis(maxY, transform.up) * forward;
-        Gizmos.DrawRay(turretBase.position, direction * gizmoDrawDistance);
-        Gizmos.DrawRay(turretBase.position, directionB * gizmoDrawDistance);
+        Vector3 direction = Quaternion.AngleAxis(minY, Vector3.up) * forward;
+        Vector3 directionB = Quaternion.AngleAxis(maxY, Vector3.up) * forward;
+        Gizmos.DrawRay(transform.position, direction * gizmoDrawDistance);
+        Gizmos.DrawRay(transform.position, directionB * gizmoDrawDistance);
        
-        Handles.DrawWireArc(turretBase.position, transform.up, direction, totalAngle, gizmoDrawDistance);
+        Handles.DrawWireArc(transform.position, Vector3.up, direction, totalAngle, gizmoDrawDistance);
         Handles.color = color * new Color(1, 1, 1, 0.1f);
-        Handles.DrawSolidArc(turretBase.position, transform.up, direction, totalAngle, gizmoDrawDistance);
+        Handles.DrawSolidArc(transform.position, Vector3.up, direction, totalAngle, gizmoDrawDistance);
 
         Gizmos.color = Color.yellow;
         float bisectorAngle = (minY + maxY) / 2f;
-        Vector3 bisectorDir = Quaternion.AngleAxis(bisectorAngle, transform.up) * forward;
-        Gizmos.DrawRay(turretBase.position, bisectorDir * gizmoDrawDistance);
+        Vector3 bisectorDir = Quaternion.AngleAxis(bisectorAngle, Vector3.up) * forward;
+        Gizmos.DrawRay(transform.position, bisectorDir * gizmoDrawDistance);
     }
 }

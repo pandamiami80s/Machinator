@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -9,51 +10,62 @@ using UnityEngine;
 ///     To do: Find LP_LIGHT, SMOKE etc
 /// </summary>
 
-[Serializable]
-public class Breakable
+public class CabCargo : MonoBehaviour
 {
-    public List<Part> parts = new List<Part>();
-}
-[Serializable]
-public class Part
-{
-    public GameObject gameObject;
-    // If nothing make more simple
-}
-
-
-public class CabCargoController : MonoBehaviour
-{
+    [Serializable] public class Breakable
+    {
+        public List<Part> parts = new List<Part>();
+    }
+    [Serializable] public class Part
+    {
+        public GameObject gameObject;
+        // If nothing make more simple
+    }
+    //[Header("Breakables")]
     public List<Breakable> breakables = new List<Breakable>();
     // Or Empty...
-    string parentName = "Breakable";
-    // Maybe list or class with LP type in future
-    public List<Transform> turretLPs = new List<Transform>();
-    string lpTurret = "LP_SML" ;
+    string breakableName = "Breakable";
+
+    //[Header("Weapon Slot")]
+    public List<Transform> weaponSlots = new List<Transform>();
+    string[] lpWeaponNames = { "LP_SML" } ;
 
 
 
-    public void SetBreakables()
+    public void SetCabAndCargo()
     {
         // Reset list back (don't forget)
-        Undo.RecordObject(this, "Set Cab and Cargo Breakables");
+        Undo.RecordObject(this, "Set Cab and Cargo");
 
         breakables.Clear();
+        weaponSlots.Clear();
 
         // There are many ways to do this, sometime need i for index?
         // It is fine by now
-
         // Filter parents of parts by criteria
         List<Transform> parents = new List<Transform>();
         Transform[] allTransforms = transform.GetComponentsInChildren<Transform>(true);
         foreach (Transform transform in allTransforms)
         {
-            Transform parent = transform;
-            if (parent.name.Contains(parentName))
+            if (transform.name.Contains(breakableName))
             {
-                if (parent.GetChild(0).GetComponent<MeshRenderer>())
+                if (transform.GetChild(0).GetComponent<MeshRenderer>())
                 {
-                    parents.Add(parent);
+                    parents.Add(transform);
+                }
+            }
+
+            foreach (string lpWeaponName in lpWeaponNames)
+            {
+                if (transform.name.Contains(lpWeaponName))
+                {
+                    Undo.RegisterFullObjectHierarchyUndo(transform, "Set Weapon Slots");
+
+                    if (!transform.GetComponent<WeaponSlot>())
+                    {
+                        transform.AddComponent<WeaponSlot>();
+                    }
+                    weaponSlots.Add(transform);
                 }
             }
         }
@@ -65,7 +77,7 @@ public class CabCargoController : MonoBehaviour
             {
                 GameObject child = parent.GetChild(i).gameObject;
                 
-                Undo.RegisterFullObjectHierarchyUndo(child, "Set Cab and Cargo Breakables");
+                Undo.RegisterFullObjectHierarchyUndo(child, "Set Cab and Cargo");
                
                 // Components
                 if (!child.GetComponent<BreakablePart>())
@@ -84,43 +96,20 @@ public class CabCargoController : MonoBehaviour
             }
             breakables.Add(breakable);
         }
-        Debug.Log($"<color=green>Setup Complete:</color> {breakables.Count} parents found");
-    }
-
-    public void SetTurrets()
-    {
-        Undo.RecordObject(this, "Set Turrets");
-
-        turretLPs.Clear();
-
-
-
-        // look at cargo
-
-        // add turret slot script to LP use empty gameobject
-        
-        
-        Transform[] allTransforms = transform.GetComponentsInChildren<Transform>(true);
-        foreach (Transform transform in allTransforms)
-        {
-            if (transform.name.Contains(lpTurret))
-            {
-                turretLPs.Add(transform);
-            }
-        }
+        Debug.Log($"<color=yellow>Setup Complete:</color> {breakables.Count} breakables, {weaponSlots.Count} weapon slot(s)");
     }
 
     public void ShowBreakablesByIndex(int index)
     {
         if (breakables.Count <= 0)
         {
-            Debug.Log("List is empty");
+            Debug.LogError("Breakables list is empty");
             return;
         }
 
         if (index < 0 || breakables[0].parts.Count <= index)
         {
-            Debug.Log("Index is out of range");
+            Debug.LogError("Breakables index is out of range");
 
             return;
         }
@@ -142,7 +131,7 @@ public class CabCargoController : MonoBehaviour
     {
         if (breakables.Count <= 0)
         {
-            Debug.Log("List is empty");
+            Debug.LogError("Breakables list is empty");
             return;
         }
 
