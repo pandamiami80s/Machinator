@@ -19,7 +19,7 @@ public class WeaponSlot : MonoBehaviour
     public float rotationSpeed = 90f;
     float gizmoDrawDistance = 2.0f;
 
-
+    //public Vector3 localOffset = new Vector3(-90.0f, 180.0f, 0.0f);
 
     public void GetWeapon()
     {
@@ -29,18 +29,22 @@ public class WeaponSlot : MonoBehaviour
     public void LookAtTarget(Vector3 targetPoint)
     {
         // Get local direction to target
+        // Was -transform.position oir turret base position idk now
         Vector3 direction = targetPoint - weapon.turretX.position;
         Vector3 localDirection = transform.InverseTransformDirection(direction);
-        
+
+        // add for child 
+        //localDirection = Quaternion.Euler(localOffset) * localDirection;
+
         // Rear mounted case (Peacekeeper Phantom slot)
         if (isRearMounted)
         {
             localDirection = -localDirection;
         }
-        
+
         // Get angle degree
         float targetYaw = Mathf.Atan2(localDirection.x, localDirection.z) * Mathf.Rad2Deg;
-        
+
         // Is full range or clamp used?
         // Different logic used here, dont ask why, it just works
         float totalRange = maxY - minY;
@@ -74,7 +78,9 @@ public class WeaponSlot : MonoBehaviour
 
         // Yaw
         // Inversed
-        float targetPitch = -Mathf.Atan2(localDirection.y, localDirection.z) * Mathf.Rad2Deg;
+        float groundDistance = new Vector2(localDirection.x, localDirection.z).magnitude;
+        // default:
+        float targetPitch = -Mathf.Atan2(localDirection.y, groundDistance) * Mathf.Rad2Deg;
         float clampedPitch = Mathf.Clamp(targetPitch, minX, maxX);
         currentAngles.x = Mathf.MoveTowards(currentAngles.x, clampedPitch, rotationSpeed * Time.fixedDeltaTime);
         weapon.turretY.localRotation = Quaternion.Euler(currentAngles.x, 0, 0);
@@ -103,7 +109,7 @@ public class WeaponSlot : MonoBehaviour
         Vector3 directionB = Quaternion.AngleAxis(maxY, Vector3.up) * forward;
         Gizmos.DrawRay(transform.position, direction * gizmoDrawDistance);
         Gizmos.DrawRay(transform.position, directionB * gizmoDrawDistance);
-       
+
         Handles.DrawWireArc(transform.position, Vector3.up, direction, totalAngle, gizmoDrawDistance);
         Handles.color = color * new Color(1, 1, 1, 0.1f);
         Handles.DrawSolidArc(transform.position, Vector3.up, direction, totalAngle, gizmoDrawDistance);

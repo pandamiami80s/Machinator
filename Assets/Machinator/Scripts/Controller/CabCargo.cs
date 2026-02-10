@@ -27,7 +27,7 @@ public class CabCargo : MonoBehaviour
     string breakableName = "Breakable";
 
     //[Header("Weapon Slot")]
-    public List<Transform> weaponSlots = new List<Transform>();
+    public List<WeaponSlot> weaponSlots = new List<WeaponSlot>();
     string[] lpWeaponNames = { "LP_SML" } ;
 
 
@@ -61,11 +61,12 @@ public class CabCargo : MonoBehaviour
                 {
                     Undo.RegisterFullObjectHierarchyUndo(transform, "Set Weapon Slots");
 
-                    if (!transform.GetComponent<WeaponSlot>())
+                    WeaponSlot weaponSlot = transform.GetComponent<WeaponSlot>();
+                    if (weaponSlot == null)
                     {
-                        transform.AddComponent<WeaponSlot>();
+                        weaponSlot = transform.AddComponent<WeaponSlot>();
                     }
-                    weaponSlots.Add(transform);
+                    weaponSlots.Add(weaponSlot);
                 }
             }
         }

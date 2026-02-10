@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System;
+using RVP;
 
 /// <summary>
 /// 2026 01 27
@@ -18,38 +20,34 @@ using System.Text.RegularExpressions;
 
 
 
+// Auto rotate 180 parent mainand set scale
 // SPAWN CAB IRL
 // SPAWN TURRET
 // Put tires to real prefab
-// Undo actions
 
 
 public class VehiclePartsController : MonoBehaviour
 {
-    [Header("Prefabs")]
-    public List<GameObject> cabPrefabs = new List<GameObject>();
-    public List<GameObject> cargoPrefabs = new List<GameObject>();
-
-    [Header("Load Points")]
-    // Cab Cargo
-    [SerializeField] List<CabCargoLP> CabCargoLPs = new List<CabCargoLP>()
+    [SerializeField] List<VehiclePart> vehicleParts = new List<VehiclePart>()
     {
-        new CabCargoLP("LP_CAB", "cab", null),
-        new CabCargoLP("LP_BSK", "cargo", null)
+        new VehiclePart("LP_CAB", "cab"),
+        new VehiclePart("LP_BSK", "cargo")
     };
-    [System.Serializable] class CabCargoLP
+    [System.Serializable] class VehiclePart
     {
         public string lpName;
         public string modelName;
         public Transform lpTransform;
+        public List<GameObject> prefabs = new List<GameObject>();
 
-        public CabCargoLP(string lp, string model, Transform transform)
+        public VehiclePart(string lp, string model)
         {
             lpName = lp;
             modelName = model;
-            lpTransform = transform;
         }
     }
+    string chassisName = "chassis";
+
     // Suspension
     Dictionary<string, string> lpSuspensionWheels = new Dictionary<string, string>()
     {
@@ -59,10 +57,13 @@ public class VehiclePartsController : MonoBehaviour
     
     [Header("Weapons Targeting")]
     public float distance = 100.0f;
-    public LayerMask layerMask;
+    public LayerMask layerMask = 1;
 
-    
-    
+
+
+    string chassis = "chassis";
+    public Vector3 rotationOffset = new Vector3(0, 180.0f, 0);
+
     /// <summary>
     /// To do: sort by cab index name for scout 03
     /// </summary>
@@ -71,11 +72,200 @@ public class VehiclePartsController : MonoBehaviour
         // Reset list back (don't forget)
         Undo.RecordObject(this, "Set Cab and Cargo");
 
-        Transform[] allTransforms = transform.GetComponentsInChildren<Transform>(true);
-        foreach (CabCargoLP cabCargoLP in CabCargoLPs)
+        
+        // Fix models
+        List<GameObject> childList = new List<GameObject>();
+        foreach (Transform child in transform)
         {
-            // Find "LP_"
-            foreach (Transform transformA in allTransforms)
+            childList.Add(child.gameObject);
+
+
+           
+        }
+
+        // Chagne to transform
+        childList.Sort((a, b) => a.name.CompareTo(b.name));
+
+
+        foreach (GameObject child in childList)
+        {
+            GameObject parent = new GameObject("new " + child.name);
+            Undo.RegisterCreatedObjectUndo(parent, "Set Cab Cargo");
+            Undo.SetTransformParent(parent.transform, transform, "Set Cab Cargo");
+            Undo.SetTransformParent(child.transform, parent.transform, "Set Cab Cargo");
+
+            child.transform.position = new Vector3();
+            child.transform.rotation = Quaternion.Euler(rotationOffset);
+        }
+        // sort here
+
+
+       
+
+        //return;
+
+        Transform[] allTransformsSS = transform.GetComponentsInChildren<Transform>(true);
+        // Find "LP_"
+        foreach (Transform transformA in allTransformsSS)
+        {
+            foreach (VehiclePart vehiclePart in vehicleParts)
+            {
+                if (transformA.name.Contains(vehiclePart.lpName))
+                {
+                    GameObject parent = new GameObject("new " + vehiclePart.lpName);
+                    Undo.RegisterCreatedObjectUndo(parent, "Set Cab Cargo");
+                    Undo.SetTransformParent(parent.transform, transform, "Set Cab Cargo");
+                    //Undo.SetTransformParent(transformA, parent.transform, "Set Cab Cargo");
+
+                    parent.transform.position = transformA.transform.position;
+
+                    // Find "cab" "cargo" models
+                    foreach (Transform transformB in allTransformsSS)
+                    {
+                        if (transformB.name.Contains("new " + vehiclePart.modelName))
+                        {
+                            //Debug.Log(transformB.name);
+                            Undo.RegisterFullObjectHierarchyUndo(transformB, "Set Cab And Cargo");
+
+
+                            // UNDO BUG
+                            // Put where it belongs
+                            transformB.SetParent(parent.transform);
+                            transformB.localPosition = Vector3.zero;
+
+                            // sort by index
+                            // AD script to  childrens 
+
+
+                        }
+
+
+                        // Filter cab inside a cab LOL
+                            /* if (transformB.name.Contains(cabCargoLP.modelName) &&
+                                 transformB.parent.GetComponent<VehiclePartsController>())
+                             {
+                                 Undo.RegisterFullObjectHierarchyUndo(transformB, "Set Cab And Cargo");
+
+                                 // Put where it belongs
+                                 transformB.SetParent(transformA);
+                                 transformB.localPosition = Vector3.zero;
+                                 //transformB.localRotation = Quaternion.identity;
+
+                                 // Add script for scripts
+                                 if (!transformB.gameObject.GetComponent<CabCargo>())
+                                 {
+                                     CabCargo CabCargo = transformB.gameObject.AddComponent<CabCargo>();
+                                     CabCargo.SetCabAndCargo();
+                                 }
+                             }*/
+
+
+                    }
+                }
+            }
+        }
+
+        // LP and sort nahui
+
+
+
+        return;
+
+
+
+
+        // Fix models
+     
+
+
+        //if chassis unknown
+        List<Transform> knownLP = new List<Transform>();
+        Transform[] allTransformsS = transform.GetComponentsInChildren<Transform>(true);
+        foreach (Transform transformA in allTransformsS)
+        {
+            foreach (VehiclePart vehiclePart in vehicleParts)
+            {
+                // Find LP to put them to
+                if (transformA.name.Contains(vehiclePart.lpName))
+                {
+                    GameObject parent = new GameObject("new " + vehiclePart.lpName);
+                    Undo.RegisterCreatedObjectUndo(parent, "Set Cab Cargo");
+                    Undo.SetTransformParent(parent.transform, transform, "Set Cab Cargo");
+                    Undo.SetTransformParent(transformA, parent.transform, "Set Cab Cargo");
+
+                    parent.transform.position = transformA.transform.position;
+
+                    knownLP.Add(parent.transform);
+                }
+            }
+        }
+
+        // put to list reference
+
+
+
+
+
+
+            return;
+
+
+        Transform[] allTransforms = transform.GetComponentsInChildren<Transform>(true);
+        foreach (Transform transformA in allTransforms)
+        {
+            // Chasiss
+            if (transformA.name.Contains(chassis))
+            {
+                GameObject parent = new GameObject("new " + chassis);
+                Undo.RegisterCreatedObjectUndo(parent, "Set Cab Cargo");
+                Undo.SetTransformParent(parent.transform, transform, "Set Cab Cargo");
+                Undo.SetTransformParent(transformA, parent.transform, "Set Cab Cargo");
+            }
+
+            // one to many
+            foreach (VehiclePart vehiclePart in vehicleParts)
+            {
+                // Find LP to put them to
+                if (transformA.name.Contains(vehiclePart.lpName))
+                {
+                    GameObject parent = new GameObject("new " + vehiclePart.lpName);
+                    Undo.RegisterCreatedObjectUndo(parent, "Set Cab Cargo");
+                    Undo.SetTransformParent(parent.transform, transform, "Set Cab Cargo");
+                    Undo.SetTransformParent(transformA, parent.transform, "Set Cab Cargo");
+                }
+
+                // Find "LP_"
+                if (transformA.name.Contains(vehiclePart.modelName))
+                {
+                    GameObject parent = new GameObject("new " + vehiclePart.modelName);
+                    Undo.RegisterCreatedObjectUndo(parent, "Set Cab Cargo");
+                    Undo.SetTransformParent(parent.transform, transform, "Set Cab Cargo");
+                    Undo.SetTransformParent(transformA, parent.transform, "Set Cab Cargo");
+
+                    // Now add scritp to 
+
+                }
+            }
+        }
+
+        // Put cabs to LP
+
+
+
+    }
+
+
+    /*
+    public void SetCabAndCargo()
+    {
+        // Reset list back (don't forget)
+        Undo.RecordObject(this, "Set Cab and Cargo");
+
+        Transform[] allTransforms = transform.GetComponentsInChildren<Transform>(true);
+        // Find "LP_"
+        foreach (Transform transformA in allTransforms)
+        {
+            foreach (VehiclePart cabCargoLP in vehicleParts)
             {
                 if (transformA.name.Contains(cabCargoLP.lpName))
                 {
@@ -89,7 +279,7 @@ public class VehiclePartsController : MonoBehaviour
                         if (transformB.name.Contains(cabCargoLP.modelName) &&
                             transformB.parent.GetComponent<VehiclePartsController>())
                         {
-                            Undo.RegisterFullObjectHierarchyUndo(transformB, "Set Cab and Cargo");
+                            Undo.RegisterFullObjectHierarchyUndo(transformB, "Set Cab And Cargo");
 
                             // Put where it belongs
                             transformB.SetParent(transformA);
@@ -106,6 +296,99 @@ public class VehiclePartsController : MonoBehaviour
                     }
                 }
             }
+            // Reset chassis
+            if (transformA.name.Contains(chassisName))
+            {
+                Undo.RecordObject(transformA, "Set Cab And Cargo");
+                transformA.localPosition = Vector3.zero;
+            }
+        }
+    }
+    */
+    /// <summary>
+    /// To do: // Index out of bounds
+    /// </summary>
+    /// <param name="cabIndex"></param>
+    /// <param name="cargoIndex"></param>
+    public void ShowCabByIndex(int index)
+    {
+        if (vehicleParts[0].lpTransform == null)
+        {
+            Debug.LogError("No Cab detected!");
+
+            return;
+        }
+
+        if (index < 0 || vehicleParts[0].lpTransform.childCount <= index)
+        {
+            Debug.LogError("Cab index is out of range");
+
+            return;
+        }
+
+        DisableCabAndCargo(0);
+
+        vehicleParts[0].lpTransform.GetChild(index).gameObject.SetActive(true);
+    }
+
+    public void ShowCargoByIndex(int index)
+    {
+        if (vehicleParts[1].lpTransform == null)
+        {
+            Debug.LogError("No Cargo detected!");
+
+            return;
+        }
+
+        if (index < 0 || vehicleParts[1].lpTransform.childCount <= index)
+        {
+            Debug.LogError("Cargo index is out of range");
+
+            return;
+        }
+
+        DisableCabAndCargo(1);
+
+        vehicleParts[1].lpTransform.GetChild(index).gameObject.SetActive(true);
+    }
+
+    void DisableCabAndCargo(int index)
+    {
+        // No cargo case
+        foreach (Transform transform in vehicleParts[index].lpTransform)
+        {
+            Undo.RegisterCompleteObjectUndo(transform, "Show Cab And Cargo By Index");
+            transform.gameObject.SetActive(false);
+        }
+    }
+
+    public void ShowCabBreakablesByIndex(int index)
+    {
+        if (vehicleParts[0].lpTransform == null)
+        {
+            Debug.LogError("No Cab detected!");
+
+            return;
+        }
+
+        foreach (Transform transform in vehicleParts[0].lpTransform)
+        {
+            transform.gameObject.GetComponent<CabCargo>().ShowBreakablesByIndex(index);
+        }
+    }
+
+    public void ShowCargoBreakablesByIndex(int index)
+    {
+        if (vehicleParts[1].lpTransform == null)
+        {
+            Debug.LogError("No Cargo detected!");
+
+            return;
+        }
+
+        foreach (Transform transform in vehicleParts[1].lpTransform)
+        {
+            transform.gameObject.GetComponent<CabCargo>().ShowBreakablesByIndex(index);
         }
     }
 
@@ -143,65 +426,38 @@ public class VehiclePartsController : MonoBehaviour
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public void SetTurretSlots()
+    public void HideSuspensionAndWheels()
     {
+        Transform[] transforms = transform.GetComponentsInChildren<Transform>(true);
+        foreach (var pair in lpSuspensionWheels)
+        {
+            // Find "LP_"
+            foreach (Transform transform in transforms)
+            {
+                if (transform.name.Contains(pair.Key))
+                {
+                    if (transform.childCount <= 0)
+                    {
+                        Debug.LogError($"No {pair.Value} Found");
 
-    }
+                        break;
+                    }
+                    Transform child = transform.GetChild(0);
 
-
-
-    public void SpawnCab(int index)
-    {
-        GameObject cab = Instantiate(cabPrefabs[index], CabCargoLPs[0].lpTransform);
-
-        // Have list of turret positinos
-        //cab.GetComponent<CabCargoController>().turretLPs[0].position = Vector3.zero;
-    }
-
-    public void SpawnWeapons()
-    {
-        // To current cab
-
-        // Call weapon from list or something global idk yet
-
-
-
-
-
-
-    }
-
-    public void SpawnCargo()
-    {
-
+                    Undo.RegisterCompleteObjectUndo(child, "Hide Suspension And Wheels");
+                    child.gameObject.SetActive(false);
+                }
+            }
+        }
     }
 
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+
+
     }
-
-
-
+    
     void FixedUpdate()
     {
         Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
@@ -216,110 +472,17 @@ public class VehiclePartsController : MonoBehaviour
             // Prevent loosing target when shooting at long distance / or sky
             targetPoint = ray.GetPoint(distance);
         }
-        
-        /// LOOK AT CAB
-        //foreach (var slot in turretSlots)
-        //{
-        // /   slot.LookAtTarget(targetPoint);
-        //}
-    }
+        Debug.DrawRay(ray.origin, ray.direction * 6000, Color.yellow);
 
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /// <summary>
-    /// To do: // Index out of bounds
-    /// </summary>
-    /// <param name="cabIndex"></param>
-    /// <param name="cargoIndex"></param>
-    public void ShowCabCargoByIndex(int cabIndex, int cargoIndex)
-    {
-        if (CabCargoLPs[0].lpTransform == null)
+        foreach (VehiclePart vehiclePart in vehicleParts)
         {
-            Debug.Log("No cab detected");
-
-            return;
-        }
-
-        foreach (CabCargoLP cabCargoLP in CabCargoLPs)
-        {
-            if (cabCargoLP.lpTransform != null)
+            if (vehiclePart.lpTransform != null)
             {
-                foreach (Transform transform in cabCargoLP.lpTransform)
+                foreach (var weaponSlot in vehiclePart.lpTransform.GetChild(0).GetComponent<CabCargo>().weaponSlots)
                 {
-                    Undo.RegisterCompleteObjectUndo(transform, "Set Cab and Cargo");
-                    transform.gameObject.SetActive(false);
+                    weaponSlot.LookAtTarget(targetPoint);
                 }
             }
         }
-        CabCargoLPs[0].lpTransform.GetChild(cabIndex).gameObject.SetActive(true);
-
-        if (CabCargoLPs[1].lpTransform == null)
-        {
-            Debug.Log("No cargo detected");
-
-            return;
-        }
-
-        CabCargoLPs[1].lpTransform.GetChild(cargoIndex).gameObject.SetActive(true);
-    }
-
-
-
-
-
-
-    public void ShowCabCargoBreakablesByIndex(int breakableIndex)
-    {
-        foreach (CabCargoLP cabCargoLP in CabCargoLPs)
-        {
-            if (cabCargoLP.lpTransform != null)
-            {
-                foreach (Transform transform in cabCargoLP.lpTransform)
-                {
-                    transform.gameObject.GetComponent<CabCargo>().ShowBreakablesByIndex(breakableIndex);
-                }
-            }
-        }
-    }
-
-    public void HideSuspensionAndWheels()
-    {
-        //  null cehck
-
-        Transform[] transforms = transform.GetComponentsInChildren<Transform>(true);
-        foreach (var pair in lpSuspensionWheels)
-        {
-            // Find "LP_"
-            foreach (Transform transform in transforms)
-            {
-                if (transform.name.Contains(pair.Key))
-                {
-                    Transform child = transform.GetChild(0);
-                    Undo.RegisterCompleteObjectUndo(child, "Set Cab and Cargo");
-
-                    child.gameObject.SetActive(false);
-                }
-            }
-        }
-
-
     }
 }

@@ -11,8 +11,10 @@ public class VehiclePartsEditor : Editor
     // Not to run in OnInspectorGUI every time
     VehiclePartsController vehiclePartsController => (VehiclePartsController)target;
     int cabIndex;
+    int cabBreakableIndex;
     int cargoIndex;
-    int breakableIndex;
+    int cargoBreakableIndex;
+
 
 
     public override void OnInspectorGUI()
@@ -38,20 +40,37 @@ public class VehiclePartsEditor : Editor
         GUILayout.Label("Debug");
         GUI.backgroundColor = Color.white;
         cabIndex = EditorGUILayout.IntField("Cab index", cabIndex);
-        cargoIndex = EditorGUILayout.IntField("Cargo index", cargoIndex);
         GUI.backgroundColor = Color.red;
-        if (GUILayout.Button("Show Cab and Cargo by Index"))
+        if (GUILayout.Button("Show Cab by Index"))
         {
-            vehiclePartsController.ShowCabCargoByIndex(cabIndex, cargoIndex);
+            vehiclePartsController.ShowCabByIndex(cabIndex);
             EditorUtility.SetDirty(vehiclePartsController);
         }
 
         GUI.backgroundColor = Color.white;
-        breakableIndex = EditorGUILayout.IntField("Breakable index", breakableIndex);
+        cargoIndex = EditorGUILayout.IntField("Cargo index", cargoIndex);
         GUI.backgroundColor = Color.red;
-        if (GUILayout.Button("Show Cab and Cargo Breakables by Index"))
+        if (GUILayout.Button("Show Cargo by Index"))
         {
-            vehiclePartsController.ShowCabCargoBreakablesByIndex(breakableIndex);
+            vehiclePartsController.ShowCargoByIndex(cargoIndex);
+            EditorUtility.SetDirty(vehiclePartsController);
+        }
+
+        GUI.backgroundColor = Color.white;
+        cabBreakableIndex = EditorGUILayout.IntField("Cab Breakable Index", cabBreakableIndex);
+        GUI.backgroundColor = Color.red;
+        if (GUILayout.Button("Show Cab Breakables by Index"))
+        {
+            vehiclePartsController.ShowCabBreakablesByIndex(cabBreakableIndex);
+            EditorUtility.SetDirty(vehiclePartsController);
+        }
+
+        GUI.backgroundColor = Color.white;
+        cargoBreakableIndex = EditorGUILayout.IntField("Cargo Breakable Index", cargoBreakableIndex);
+        GUI.backgroundColor = Color.red;
+        if (GUILayout.Button("Show Cargo Breakables by Index"))
+        {
+            vehiclePartsController.ShowCargoBreakablesByIndex(cargoBreakableIndex);
             EditorUtility.SetDirty(vehiclePartsController);
         }
 

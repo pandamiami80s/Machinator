@@ -68,4 +68,9 @@ public class Weapon : MonoBehaviour
         child.localPosition = Vector3.zero;
         Debug.Log($"<color=yellow>Setup Complete:</color> {firePositions.Count} fire position(s), {shellPositions.Count} shell position(s)");
     }
+
+    public void Update()
+    {
+        Debug.DrawRay(firePositions[0].position, -firePositions[0].forward * 500000.0f, Color.red);
+    }
 }
