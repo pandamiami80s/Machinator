@@ -29,6 +29,7 @@ public class RaycastingBullet : MonoBehaviour
         // 2. Пускаем луч вперед на расстояние одного шага
         if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, stepDistance, hitLayers))
         {
+            Debug.Log(hit.transform.gameObject.name );
             HandleHit(hit);
         }
         else
@@ -64,7 +65,7 @@ public class RaycastingBullet : MonoBehaviour
         }
 
         // Лог для дебага (можно удалить)
-        Debug.Log($"Попал в {hit.collider.name}");
+        //Debug.Log($"Попал в {hit.collider.name}");
 
         // Уничтожаем объект пули
         Destroy(gameObject);

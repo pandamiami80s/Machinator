@@ -1,6 +1,10 @@
+using RVP;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.InputSystem.HID;
+using UnityEngine.UIElements;
+using static CabCargo;
 
 /// <summary>
 /// 2026 02 07
@@ -23,7 +27,19 @@ public class Weapon : MonoBehaviour
     public GameObject shellPrefab;
     public List<Transform> shellPositions = new List<Transform>();
     string lpShell = "LP_SHELL";
-   
+
+
+
+    public Vector3 rotationOffset = new Vector3(0, 180.0f, 0);
+
+
+    // hit?
+    public void Fire()
+    {
+        Instantiate(bulletPrefab, firePositions[0].position, firePositions[0].rotation);
+
+        //Debug.DrawLine(firePositions[0].position, hit, UnityEngine.Color.red, 1.0f);
+    }
 
 
     public void SetWeapon()
@@ -33,44 +49,147 @@ public class Weapon : MonoBehaviour
         firePositions.Clear();
         shellPositions.Clear();
 
+
+
+
+
+        // Fix models by puting to empty ibjetcs
+        List<GameObject> childList = new List<GameObject>();
+        foreach (Transform childxx in transform)
+        {
+            childList.Add(childxx.gameObject);
+        }
+        // SORT index 01 03
+        // Chagne to transform
+        //childList.Sort((a, b) => a.name.CompareTo(b.name));
+
+        foreach (GameObject childxx in childList)
+        {
+            GameObject parent = new GameObject("meow " + childxx.name);
+            Undo.RegisterCreatedObjectUndo(parent, "Set Cab Cargo");
+            Undo.SetTransformParent(parent.transform, transform, "Set Cab Cargo");
+            Undo.SetTransformParent(childxx.transform, parent.transform, "Set Cab Cargo");
+
+            childxx.transform.position = new Vector3();
+
+            // ADD THIS T VEHICLE CONTROLLER
+            //Vector3 currentEuler = childxx.transform.localEulerAngles;
+            //Vector3 newEuler = currentEuler + rotationOffset;
+            //childxx.transform.localEulerAngles = newEuler;
+            childxx.transform.Rotate(rotationOffset, Space.World);
+        }
+
+
+
+        // finf lp and put gun on lp copy
+
+
+
+        //Transform lp;
+      
+
+        // FIND LPS
         Transform[] allTransforms = transform.GetComponentsInChildren<Transform>(true);
-        foreach (Transform transform in allTransforms)
+        foreach (Transform transformA in allTransforms)
         {
             // Find LP
-            if (transform.name.Contains(lpTurret))
+            if (transformA.name.Contains(lpTurret))
             {
-                // Find gun
+                GameObject parent = new GameObject("new " + lpTurret);
+                Undo.RegisterCreatedObjectUndo(parent, "Set Cab Cargo");
+                Undo.SetTransformParent(parent.transform, transform, "Set Cab Cargo");
+                //Undo.SetTransformParent(transformA, parent.transform, "Set Cab Cargo");
+
+                parent.transform.position = transformA.position;
+
+
+
+                // MAKE GUN CHILD TO LP
+                // NOT LIKE CAB LOGIC
+                // gunName
+                // OBJECT WITH LP THAW TIL NBE PARENT
+                // FIND CHILD
                 foreach (Transform transformB in allTransforms)
                 {
-                    if (transformB.name.Contains(gunName))
+                    if (transformB.name.Contains("meow") && transformB.name.Contains(gunName))
                     {
-                        turretY = transformB;
+                        //Debug.Log(transformB.name);
+                        //Debug.Log(parent.name);
 
-                        Undo.SetTransformParent(transformB, transform, "Set Weapon");
+                        Undo.SetTransformParent(transformB, parent.transform, "Set Cab Cargo");
                         transformB.localPosition = Vector3.zero;
+                        turretY = transformB;
                     }
+
+                    // Y to X
+                    if (transformB.name.Contains("meow") && !transformB.name.Contains(gunName))
+                    {
+                        Debug.Log(transformB.name);
+                        turretX = transformB;
+                        Undo.SetTransformParent(parent.transform, transformB, "Set Cab Cargo");
+                    }
+
+
+                    //lp = parent.transform;
                 }
             }
 
             // Fidn shell and fire
-            if (transform.name.Contains(lpFire))
+            if (transformA.name.Contains(lpFire))
             {
-                firePositions.Add(transform);
+                firePositions.Add(transformA);
             }
-            if (transform.name.Contains(lpShell))
+            if (transformA.name.Contains(lpShell))
             {
-                shellPositions.Add(transform);
+                shellPositions.Add(transformA);
             }
         }
 
-        Transform child = transform.GetChild(0);
-        turretX = child;
-        child.localPosition = Vector3.zero;
-        Debug.Log($"<color=yellow>Setup Complete:</color> {firePositions.Count} fire position(s), {shellPositions.Count} shell position(s)");
+
+
+
+
+        // Put Y gun to X
+        /*foreach (Transform transformB in transform)
+        {
+            if (transformB.name.Contains(gunName))
+            {
+                turretY = transformB;
+
+                Undo.SetTransformParent(transformB, parent.transform, "Set Weapon");
+                transformB.localPosition = Vector3.zero;
+            }
+        }*/
+
+        // use LP to put gun
+
+
+
+
+
+        // Buld weapon
+
+
+        /*foreach (Transform transformB in transform)
+        {
+            if (transformB.name.Contains(gunName))
+            {
+                turretY = transformB;
+
+                Undo.SetTransformParent(transformB, parent.transform, "Set Weapon");
+                transformB.localPosition = Vector3.zero;
+            }
+        }*/
+
+        //return;
+        //Transform child = transform.GetChild(0);
+        //turretX = child;
+        //child.localPosition = Vector3.zero;
+        //Debug.Log($"<color=yellow>Setup Complete:</color> {firePositions.Count} fire position(s), {shellPositions.Count} shell position(s)");
     }
 
     public void Update()
     {
-        Debug.DrawRay(firePositions[0].position, -firePositions[0].forward * 500000.0f, Color.red);
+        Debug.DrawRay(firePositions[0].position,    firePositions[0].forward * 500000.0f, Color.red);
     }
 }

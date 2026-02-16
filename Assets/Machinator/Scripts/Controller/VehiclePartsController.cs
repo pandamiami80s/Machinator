@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System;
 using RVP;
+using Unity.VisualScripting;
 
 /// <summary>
 /// 2026 01 27
@@ -64,6 +65,10 @@ public class VehiclePartsController : MonoBehaviour
     string chassis = "chassis";
     public Vector3 rotationOffset = new Vector3(0, 180.0f, 0);
 
+
+
+    public WeaponManager weaponManager;
+
     /// <summary>
     /// To do: sort by cab index name for scout 03
     /// </summary>
@@ -73,19 +78,15 @@ public class VehiclePartsController : MonoBehaviour
         Undo.RecordObject(this, "Set Cab and Cargo");
 
         
-        // Fix models
+        // Fix models by puting to empty ibjetcs
         List<GameObject> childList = new List<GameObject>();
         foreach (Transform child in transform)
         {
             childList.Add(child.gameObject);
-
-
-           
         }
-
+        // SORT index 01 03
         // Chagne to transform
         childList.Sort((a, b) => a.name.CompareTo(b.name));
-
 
         foreach (GameObject child in childList)
         {
@@ -95,15 +96,15 @@ public class VehiclePartsController : MonoBehaviour
             Undo.SetTransformParent(child.transform, parent.transform, "Set Cab Cargo");
 
             child.transform.position = new Vector3();
-            child.transform.rotation = Quaternion.Euler(rotationOffset);
+            //child.transform.rotation = Quaternion.Euler(rotationOffset);
+            child.transform.Rotate(rotationOffset, Space.World);
         }
-        // sort here
-
-
        
 
-        //return;
 
+        // PUT MODELS ON LPS
+        // SHOW IF CHASSIS ARE NOT DETECTED
+        //return;
         Transform[] allTransformsSS = transform.GetComponentsInChildren<Transform>(true);
         // Find "LP_"
         foreach (Transform transformA in allTransformsSS)
@@ -118,6 +119,10 @@ public class VehiclePartsController : MonoBehaviour
                     //Undo.SetTransformParent(transformA, parent.transform, "Set Cab Cargo");
 
                     parent.transform.position = transformA.transform.position;
+
+                    // refeerence lp 
+                    vehiclePart.lpTransform = parent.transform;
+
 
                     // Find "cab" "cargo" models
                     foreach (Transform transformB in allTransformsSS)
@@ -136,8 +141,21 @@ public class VehiclePartsController : MonoBehaviour
                             // sort by index
                             // AD script to  childrens 
 
+                            // ADD CABCARGO SCRIPT TO GET LPS FOR GUNS AND SO ON
+                            Debug.Log(transformB.name);
+                            if (!transformB.GetComponent<CabCargo>())
+                            {
+                                CabCargo cc = transformB.AddComponent<CabCargo>();
+                                // NOW GET GUN LP TO NEW BJ
+                                cc.SetCabAndCargo();
+
+                            }
 
                         }
+
+
+
+
 
 
                         // Filter cab inside a cab LOL
@@ -458,7 +476,7 @@ public class VehiclePartsController : MonoBehaviour
 
     }
     
-    void FixedUpdate()
+    void Update()
     {
         Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
         Vector3 targetPoint;
@@ -481,8 +499,32 @@ public class VehiclePartsController : MonoBehaviour
                 foreach (var weaponSlot in vehiclePart.lpTransform.GetChild(0).GetComponent<CabCargo>().weaponSlots)
                 {
                     weaponSlot.LookAtTarget(targetPoint);
+
+
+                    // 4. SHOOT DEBUG LINE (On Click)
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        //Debug.DrawLine(verticalTransform.position, targetPoint, Color.yellow, 1.0f);
+
+                        /* IDamageable damageable = hit.collider.GetComponent<IDamageable>();
+
+                         if (damageable != null)
+                         {
+                             damageable.ApplyDamage(25);
+
+                         }*/
+
+                        weaponSlot.FireWeapon();
+                    }
                 }
+
+
+
+
             }
         }
+
+
+       
     }
 }

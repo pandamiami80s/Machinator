@@ -1,3 +1,4 @@
+using System;
 using UnityEditor;
 using UnityEngine;
 
@@ -21,9 +22,31 @@ public class WeaponSlot : MonoBehaviour
 
     //public Vector3 localOffset = new Vector3(-90.0f, 180.0f, 0.0f);
 
-    public void GetWeapon()
+
+    public void FireWeapon()
     {
-        weapon = transform.GetChild(0).GetComponent<Weapon>();
+        weapon.Fire();
+    }
+
+    public void SpawnWeapon()
+    {
+        //weapon = transform.GetChild(0).GetComponent<Weapon>();
+
+        // No dragging! We just call WeaponDatabase.Instance
+        GameObject prefab = WeaponManager.Instance.GetWeapon(0);
+
+        if (prefab != null)
+        {
+            GameObject weaponss = Instantiate(prefab, transform.position, transform.rotation);
+            weaponss.transform.SetParent(transform);
+
+            weapon = weaponss.GetComponent<Weapon>();
+        }
+    }
+
+    void Start()
+    {
+        SpawnWeapon();
     }
 
     public void LookAtTarget(Vector3 targetPoint)
