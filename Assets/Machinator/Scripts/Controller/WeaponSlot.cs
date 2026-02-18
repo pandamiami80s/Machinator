@@ -12,8 +12,8 @@ public class WeaponSlot : MonoBehaviour
 
     [Header("Rotation")]
     public bool isRearMounted;
-    public float minY = -90f;
-    public float maxY = 90f;
+    public float minY = -180f;
+    public float maxY = 180f;
     public float minX = -15.0f;
     public float maxX = 15.0f;
     Vector2 currentAngles;

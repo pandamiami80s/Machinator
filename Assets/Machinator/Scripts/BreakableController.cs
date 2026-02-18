@@ -2,71 +2,56 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
+/// <summary>
+/// 2026 02 18
+/// hitCountMax is number of hits to take before switching to next breakable part 
+/// Can be armore points but need some rework. Armor will be stored at CabCargo and passed down to breakables
+/// </summary>
 public class BreakableController : MonoBehaviour
 {
-    public List<GameObject> parts = new List<GameObject>();
+    public List<GameObject> breakableParts = new List<GameObject>();
+    int hitCount;
+    int hitCountMax = 3;
+    int partIndex;
 
-    // damage index
-    int damageIndex;
 
-    public void SetParts()
+
+    public void SetBreakableParts()
     {
-        for (int i = 0; i < transform.childCount; i++)
+        // Does not redo
+        Undo.RecordObject(this, "Set Breakable Parts");
+
+        foreach (Transform child in transform)
         {
-            GameObject child = transform.GetChild(i).gameObject;
-
-            Undo.RegisterFullObjectHierarchyUndo(child, "Set Cab and Cargo");
-
-            // Components
-            if (!child.GetComponent<BreakablePart>())
+            GameObject gameObject = child.gameObject;
+            if (!gameObject.GetComponent<BreakablePart>())
             {
-                BreakablePart bp = child.AddComponent<BreakablePart>();
-                bp.bc = this;
+                BreakablePart breakablePart = Undo.AddComponent<BreakablePart>(gameObject);
+                breakablePart.breakableController = this;
             }
-            if (!child.GetComponent<MeshCollider>())
+            if (!gameObject.GetComponent<MeshCollider>())
             {
-                child.AddComponent<MeshCollider>().convex = true;
+                Undo.AddComponent<MeshCollider>(gameObject).convex = true;
             }
-
-            // Data
-            //Part part = new Part();
-            //part.gameObject = child;
-            parts.Add(child);
+            breakableParts.Add(gameObject);
         }
     }
 
-    private void Start()
+    public void DamagePart()
     {
-        // init
-        foreach (GameObject part in parts)
-        {
-            part.SetActive(false);
-        }
-
-        parts[0].SetActive(true);
-    }
-
-
-    public void CalcDamage(int amount)
-    {
-        if (parts.Count-1 <= damageIndex)
+        if (breakableParts.Count - 1 <= partIndex)
         {
             return;
         }
 
-        // find selt in a slist
-        // Who was damged
-        Debug.Log(0);
+        hitCount++;
+        if (hitCountMax <= hitCount)
+        {
+            breakableParts[partIndex].SetActive(false);
+            partIndex++;
+            breakableParts[partIndex].SetActive(true);
 
-        
-
-       
-
-        parts[damageIndex].SetActive(false);
-        damageIndex++;
-        parts[damageIndex].SetActive(true);
-        // partr index is from that list
+            hitCount = 0;
+        }
     }
-
-
 }

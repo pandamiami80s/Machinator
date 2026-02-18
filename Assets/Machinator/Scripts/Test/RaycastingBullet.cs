@@ -54,7 +54,7 @@ public class RaycastingBullet : MonoBehaviour
         IDamageable damageable = hit.collider.GetComponent<IDamageable>();
         if (damageable != null)
         {
-            damageable.ApplyDamage(damage);
+            damageable.TakeDamage(damage);
         }
 
         // Создаем эффект искр/дырок от пуль

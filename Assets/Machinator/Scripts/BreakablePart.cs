@@ -1,18 +1,17 @@
 using UnityEngine;
 
 /// <summary>
-/// 2026 02 03
+/// 2026 02 18
+/// Can receive exact damage amount
 /// </summary>
 public class BreakablePart : MonoBehaviour, IDamageable
 {
-    // REference to a main script 
+    public BreakableController breakableController;
 
-    public BreakableController bc;
 
-    public void ApplyDamage(int amount)
+
+    public void TakeDamage(int damage)
     {
-        // Call cab for cal
-        // cab.calcdamage();
-        bc.CalcDamage(amount);
+        breakableController.DamagePart();
     }
 }

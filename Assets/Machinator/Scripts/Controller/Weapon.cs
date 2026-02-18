@@ -1,10 +1,7 @@
-using RVP;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.InputSystem.HID;
 using UnityEngine.UIElements;
-using static CabCargo;
 
 /// <summary>
 /// 2026 02 07
@@ -12,11 +9,29 @@ using static CabCargo;
 
 public class Weapon : MonoBehaviour
 {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     [Header("Rotation")]
     // Accessed by TurretSLot
     public Transform turretX;
     public Transform turretY;
-    string lpTurret = "LP_GUN";
+    string[] lpNames = { "LP_GUN" } ;
     string gunName = "gun";
    
 
@@ -42,8 +57,48 @@ public class Weapon : MonoBehaviour
     }
 
 
+    // x = base
+    // y = gun
+
+
     public void SetWeapon()
     {
+        Utils.FixModels(transform);
+
+        // Build weapon
+        Transform gun = null;
+        Transform gunBase = null;
+        foreach (Transform child in transform)
+        {
+            if (child.name.Contains(gunName))
+            {
+                gun = child;
+            }
+            else
+            {
+                gunBase = child;
+            }
+        }
+        
+        if (gun != null && gunBase != null)
+        {
+            //Utils.FixLoadPoints(transform, lpNames);
+
+            //List<Transform> loadPoint = Utils.GetLoadPoint(transform, lpNames);
+           // Undo.SetTransformParent(loadPoint[0], gunBase.transform, "Set Weapon");
+            //Undo.SetTransformParent(gun, loadPoint[0].transform, "Set Weapon");
+            gun.localPosition = Vector3.zero;
+        }
+
+
+
+
+        return;
+
+
+
+
+
         Undo.RecordObject(this, "Set Weapon");
 
         firePositions.Clear();
@@ -88,7 +143,7 @@ public class Weapon : MonoBehaviour
         //Transform lp;
       
 
-        // FIND LPS
+        /*// FIND LPS
         Transform[] allTransforms = transform.GetComponentsInChildren<Transform>(true);
         foreach (Transform transformA in allTransforms)
         {
@@ -143,7 +198,7 @@ public class Weapon : MonoBehaviour
             {
                 shellPositions.Add(transformA);
             }
-        }
+        }*/
 
 
 
@@ -190,6 +245,30 @@ public class Weapon : MonoBehaviour
 
     public void Update()
     {
-        Debug.DrawRay(firePositions[0].position,    firePositions[0].forward * 500000.0f, Color.red);
+        //Debug.DrawRay(firePositions[0].position, firePositions[0].forward * 500000.0f, Color.red);
+    }
+}
+
+
+/// <summary>
+/// 2026 02 07
+/// </summary>
+
+[CustomEditor(typeof(Weapon))]
+public class WeaponEditor : Editor
+{
+    Weapon Weapon => (Weapon)target;
+
+    public override void OnInspectorGUI()
+    {
+        DrawDefaultInspector();
+
+        GUILayout.Space(10);
+        GUI.backgroundColor = Color.yellow;
+        if (GUILayout.Button("Set Weapon"))
+        {
+            Weapon.SetWeapon();
+            EditorUtility.SetDirty(Weapon);
+        }
     }
 }

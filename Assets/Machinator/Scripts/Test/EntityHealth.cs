@@ -21,7 +21,7 @@ public class EntityHealth : MonoBehaviour, IDamageable
         }
     }
 
-    public void ApplyDamage(int amount)
+    public void TakeDamage(int amount)
     {
         throw new System.NotImplementedException();
     }
