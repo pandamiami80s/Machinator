@@ -1,11 +1,9 @@
-using System;
 using UnityEditor;
 using UnityEngine;
 
 /// <summary>
 /// 2026 02 07
 /// </summary>
-
 public class WeaponSlot : MonoBehaviour
 {
     public Weapon weapon;
@@ -20,44 +18,13 @@ public class WeaponSlot : MonoBehaviour
     public float rotationSpeed = 90f;
     float gizmoDrawDistance = 2.0f;
 
-    //public Vector3 localOffset = new Vector3(-90.0f, 180.0f, 0.0f);
 
-
-    public void FireWeapon()
-    {
-        weapon.Fire();
-    }
-
-    public void SpawnWeapon()
-    {
-        //weapon = transform.GetChild(0).GetComponent<Weapon>();
-
-        // No dragging! We just call WeaponDatabase.Instance
-        GameObject prefab = WeaponManager.Instance.GetWeapon(0);
-
-        if (prefab != null)
-        {
-            GameObject weaponss = Instantiate(prefab, transform.position, transform.rotation);
-            weaponss.transform.SetParent(transform);
-
-            weapon = weaponss.GetComponent<Weapon>();
-        }
-    }
-
-    void Start()
-    {
-        SpawnWeapon();
-    }
 
     public void LookAtTarget(Vector3 targetPoint)
     {
         // Get local direction to target
-        // Was -transform.position oir turret base position idk now
-        Vector3 direction = targetPoint - weapon.turretX.position;
+        Vector3 direction = targetPoint - weapon.gunBase.position;
         Vector3 localDirection = transform.InverseTransformDirection(direction);
-
-        // add for child 
-        //localDirection = Quaternion.Euler(localOffset) * localDirection;
 
         // Rear mounted case (Peacekeeper Phantom slot)
         if (isRearMounted)
@@ -97,19 +64,17 @@ public class WeaponSlot : MonoBehaviour
         {
             finalRotation = currentAngles.y;
         }
-        weapon.turretX.localRotation = Quaternion.Euler(0, finalRotation, 0);
+        weapon.gunBase.localRotation = Quaternion.Euler(0, finalRotation, 0);
 
         // Yaw
         // Inversed
         float groundDistance = new Vector2(localDirection.x, localDirection.z).magnitude;
-        // default:
         float targetPitch = -Mathf.Atan2(localDirection.y, groundDistance) * Mathf.Rad2Deg;
         float clampedPitch = Mathf.Clamp(targetPitch, minX, maxX);
         currentAngles.x = Mathf.MoveTowards(currentAngles.x, clampedPitch, rotationSpeed * Time.fixedDeltaTime);
-        weapon.turretY.localRotation = Quaternion.Euler(currentAngles.x, 0, 0);
+        weapon.gun.localRotation = Quaternion.Euler(currentAngles.x, 0, 0);
     }
 
-    //OnDrawGizmosSelected
     void OnDrawGizmos()
     {
         float totalAngle = maxY - minY;

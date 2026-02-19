@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -9,7 +10,8 @@ using UnityEngine;
 public static class Utils
 {
     static Vector3 rotationOffset = new Vector3(0, 180.0f, 0);
-   
+    static string extractName = " extract";
+
     /// <summary>
     /// Thanks to blender need to create parent for models and rotate
     /// </summary>
@@ -75,23 +77,35 @@ public static class Utils
     /// <param name="lpNames"></param>
     public static void ExtractLoadPoints(Transform parent, string[] lpNames)
     {
-        string fixName = " extract";
+        // Gets all LP including extracted on second button press
         List<Transform> loadPoints = GetAllLoadPoints(parent, lpNames);
         if (loadPoints == null)
         {
             return;
         }
-        foreach (Transform child in parent)
+
+        // Filtering
+        // Already extracted points
+        List<Transform> extractedLoadPoints = new List<Transform>();
+        foreach(Transform child in parent)
         {
-            if (child.name.Contains(fixName))
+            extractedLoadPoints.Add(child);
+        }
+        // Prevend errors on second button click
+        foreach (Transform extractedLoadPoint in extractedLoadPoints)
+        {
+            foreach (Transform loadPoint in loadPoints)
             {
-                return;
+                if (extractedLoadPoint.name.Contains(loadPoint.name))
+                {
+                    return;
+                }
             }
         }
 
         foreach (Transform loadPoint in loadPoints)
         {
-            GameObject newParent = ObjectFactory.CreateGameObject(loadPoint.name + fixName);
+            GameObject newParent = ObjectFactory.CreateGameObject(loadPoint.name + extractName);
             Undo.RegisterCreatedObjectUndo(newParent, "Extract Load Points");
             Undo.SetTransformParent(newParent.transform, parent, "Extract Load Points");
             newParent.transform.position = loadPoint.position;
@@ -106,7 +120,8 @@ public static class Utils
         {
             foreach (string lpName in lpNames)
             {
-                if (child.name.Contains(lpName))
+                // Remove extracted from recursive search
+                if (child.name.Contains(lpName) && !child.name.Contains(extractName))
                 {
                     loadPoints.Add(child);
                 }

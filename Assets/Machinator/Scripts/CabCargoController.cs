@@ -8,7 +8,7 @@ using UnityEngine;
 ///     To do: Find LP_LIGHT, SMOKE etc
 /// </summary>
 
-public class CabCargo : MonoBehaviour
+public class CabCargoController : MonoBehaviour
 {
     string breakableName = "Breakable";
 
@@ -109,10 +109,10 @@ public class CabCargo : MonoBehaviour
     }
 }
 
-[CustomEditor(typeof(CabCargo))]
+[CustomEditor(typeof(CabCargoController))]
 public class CabCargoEditor : Editor
 {
-    CabCargo CabCargo => (CabCargo)target;
+    CabCargoController CabCargoController => (CabCargoController)target;
     int breakableIndex;
 
 
@@ -122,29 +122,28 @@ public class CabCargoEditor : Editor
         DrawDefaultInspector();
 
         GUILayout.Space(10);
+        GUILayout.Label("Editor");
         GUI.backgroundColor = Color.yellow;
         if (GUILayout.Button("Set Cab Cargo"))
         {
-            CabCargo.SetCabCargo();
-            EditorUtility.SetDirty(CabCargo);
+            CabCargoController.SetCabCargo();
+            EditorUtility.SetDirty(CabCargoController);
         }
-        
-        // Debug part (If brekables list is full)
-        GUILayout.Space(10);
-        GUILayout.Label("Debug");
+       
         GUI.backgroundColor = Color.white;
         breakableIndex = EditorGUILayout.IntField("Breakable index", breakableIndex);
-        GUI.backgroundColor = Color.red;
+        GUI.backgroundColor = Color.darkRed;
         if (GUILayout.Button("Show Breakables by Index"))
         {
-            CabCargo.ShowBreakablesByIndex(breakableIndex);
-            EditorUtility.SetDirty(CabCargo);
+            CabCargoController.ShowBreakablesByIndex(breakableIndex);
+            EditorUtility.SetDirty(CabCargoController);
         }
 
+        GUI.backgroundColor = Color.red;
         if (GUILayout.Button("Show All Breakables"))
         {
-            CabCargo.ShowAllBreakables();
-            EditorUtility.SetDirty(CabCargo);
+            CabCargoController.ShowAllBreakables();
+            EditorUtility.SetDirty(CabCargoController);
         }
     }
 }
