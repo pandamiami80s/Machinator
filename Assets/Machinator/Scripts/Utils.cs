@@ -84,24 +84,10 @@ public static class Utils
             return;
         }
 
-        // Filtering
-        // Already extracted points
-        List<Transform> extractedLoadPoints = new List<Transform>();
-        foreach(Transform child in parent)
-        {
-            extractedLoadPoints.Add(child);
-        }
-        // Prevend errors on second button click
-        foreach (Transform extractedLoadPoint in extractedLoadPoints)
-        {
-            foreach (Transform loadPoint in loadPoints)
-            {
-                if (extractedLoadPoint.name.Contains(loadPoint.name))
-                {
-                    return;
-                }
-            }
-        }
+        // Get children names: LP_CAB, LP_CAB extracted, LP_CARGO
+        List<string> existingNames = parent.Cast<Transform>().Select(transform => transform.name).ToList();
+        // Remove from list if contains any
+        loadPoints.RemoveAll(loadPoint => existingNames.Any(existing => existing.Contains(loadPoint.name)));
 
         foreach (Transform loadPoint in loadPoints)
         {
@@ -120,8 +106,7 @@ public static class Utils
         {
             foreach (string lpName in lpNames)
             {
-                // Remove extracted from recursive search
-                if (child.name.Contains(lpName) && !child.name.Contains(extractName))
+                if (child.name.Contains(lpName))
                 {
                     loadPoints.Add(child);
                 }

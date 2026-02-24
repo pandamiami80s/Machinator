@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -24,7 +25,69 @@ public class Weapon : MonoBehaviour
     public GameObject shellPrefab;
     string[] lpShell = { "LP_SHELL" };
 
+    [Header("")]
+    // Two times less than irl
+    public float roundsPerMinute = 300f;
+    float timeBetweenShots;
+    float nextFireTime;
+    public int maxAmmo = 10;
+    int currentAmmo;
+    public float reloadTime = 2.0f;
+    bool isReloading;
 
+
+
+    void Start()
+    {
+        timeBetweenShots = 60f / roundsPerMinute;
+        nextFireTime = Time.time;
+        currentAmmo = maxAmmo;
+    }
+
+    public void Fire()
+    {
+        if (isReloading)
+        {
+            return;
+        }
+
+        if (currentAmmo <= 0)
+        {
+            Reload();
+
+            return;
+        }
+
+        if (nextFireTime <= Time.time)
+        {
+            foreach (Transform firePosition in firePositions)
+            {
+                Instantiate(bulletPrefab, firePosition.position, firePosition.rotation);
+            }
+
+            currentAmmo--;
+            nextFireTime = Time.time + timeBetweenShots;
+        }
+    }
+
+    public void Reload()
+    {
+        if (!isReloading && currentAmmo < maxAmmo)
+        {
+            StartCoroutine(IEReload());
+        }
+    }
+
+    IEnumerator IEReload()
+    {
+        Debug.Log("Reloading " + transform.gameObject.name);
+        isReloading = true;
+
+        yield return new WaitForSeconds(reloadTime);
+
+        currentAmmo = maxAmmo;
+        isReloading = false;
+    }
 
     public void SetWeapon()
     {
@@ -82,11 +145,6 @@ public class Weapon : MonoBehaviour
         }
 
         return loadPoints;
-    }
-
-    public void Fire()
-    {
-        Instantiate(bulletPrefab, firePositions[0].position, firePositions[0].rotation);
     }
 }
 

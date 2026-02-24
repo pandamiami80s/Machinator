@@ -172,7 +172,7 @@ GameObject:
   - component: {fileID: 4260983389725646770}
   - component: {fileID: 2607107304421447473}
   m_Layer: 0
-  m_Name: Hornet
+  m_Name: PKT
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -214,6 +214,9 @@ MonoBehaviour:
   shellPositions:
   - {fileID: 199497373817932710}
   shellPrefab: {fileID: 0}
+  roundsPerMinute: 300
+  maxAmmo: 10
+  reloadTime: 2
 --- !u!1001 &2675103262389739085
 PrefabInstance:
   m_ObjectHideFlags: 0

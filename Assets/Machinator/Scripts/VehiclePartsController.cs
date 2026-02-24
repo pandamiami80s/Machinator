@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEditor;
+using UnityEngine.Events;
 
 /// <summary>
 /// 2026 02 19
@@ -35,6 +36,33 @@ public class VehiclePartsController : MonoBehaviour
             lpName = lp;
             modelName = model;
         }
+    }
+
+    [System.Serializable] class OnVehiclePartSpawned : UnityEvent<List<WeaponSlot>> { }
+    [SerializeField] OnVehiclePartSpawned onVehiclePartSpawned;
+
+
+    void Start()
+    {
+        // Build random vehicle parts
+        int randomCab = Random.Range(0, vehicleParts[0].prefabs.Count);
+        SpawnVehiclePart(0, randomCab);
+
+        // No cargo case
+        if (vehicleParts[1].lpTransform == null)
+        {
+            return;
+        }
+        int randomCargo = Random.Range(0, vehicleParts[1].prefabs.Count);
+        SpawnVehiclePart(1, randomCargo);
+    }
+
+    void SpawnVehiclePart(int partIndex, int index)
+    {
+        GameObject vehiclePart = Instantiate(vehicleParts[partIndex].prefabs[index], vehicleParts[partIndex].lpTransform);
+        List<WeaponSlot> weaponSlots = vehiclePart.GetComponent<CabCargoController>().weaponSlots;
+
+        onVehiclePartSpawned.Invoke(weaponSlots);
     }
 
     public void SetVehicleParts()

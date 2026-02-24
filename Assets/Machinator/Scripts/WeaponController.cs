@@ -6,60 +6,47 @@ using UnityEngine;
 /// </summary>
 public class WeaponController : MonoBehaviour
 {
-    // Check weapon and slots logic
-    // Setup weapon editor
-    // Check projectiles
-    // Procceed to lP_light maybe
-    // Need all waepon slots here and update them on cab changed? event??? 
-    // debugger get first actiavqated object here
-    // real one gets when cab is created
-    // get slot -> slot get weapon
-    
-    
-    
-    // HOW TO FILL IT?
-    public List<WeaponSlot> weaponSlots = new List<WeaponSlot>();
-   
-
-
+    List<WeaponSlot> allWeaponSlots = new List<WeaponSlot>();
 
     [Header("Weapons")]
     public float distance = 100.0f;
     public LayerMask layerMask = 1;
-
-
     Vector3 targetPoint;
 
-
-
-    void Start()
+    public void GetWeapons(List<WeaponSlot> weaponSlots)
     {
-        // Get weapon slots on current cab
-        
-        
+        allWeaponSlots.AddRange(weaponSlots);
 
-        // Spawn weapon
         foreach (WeaponSlot weaponSlot in weaponSlots)
         {
-            GameObject weapon = Instantiate(WeaponManager.Instance.GetWeapon(0), weaponSlot.transform);
+            GameObject weapon = Instantiate(WeaponDatabase.Instance.GetRandomWeapon(), weaponSlot.transform);
             weaponSlot.weapon = weapon.GetComponent<Weapon>();
         }
     }
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        // Fire
+        if (Input.GetMouseButton(0))
         {
-            foreach (WeaponSlot weaponSlot in weaponSlots)
+            foreach (WeaponSlot weaponSlot in allWeaponSlots)
             {
                 weaponSlot.weapon.Fire();
+            }
+        }
+
+        // Reload
+        if (Input.GetMouseButtonDown(1))
+        {
+            foreach (WeaponSlot weaponSlot in allWeaponSlots)
+            {
+                weaponSlot.weapon.Reload();
             }
         }
     }
 
     void FixedUpdate()
     {
-        // Targeting
         Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
         if (Physics.Raycast(ray, out RaycastHit hit, distance, layerMask))
         {
@@ -72,7 +59,7 @@ public class WeaponController : MonoBehaviour
         }
         Debug.DrawLine(ray.origin, targetPoint, Color.red);
 
-        foreach (WeaponSlot weaponSlot in weaponSlots)
+        foreach (WeaponSlot weaponSlot in allWeaponSlots)
         {
             weaponSlot.LookAtTarget(targetPoint);
         }

@@ -10,7 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 32d27919d74ec0a46bb4b4598985936c, type: 3}
-  m_Name: WeaponDB
-  m_EditorClassIdentifier: Assembly-CSharp::WeaponManager
+  m_Name: WeaponDatabase
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponDatabase
   allWeapons:
+  - {fileID: 9193612883261295227, guid: 2febfef89a2f58146af7a85e88177b9e, type: 3}
   - {fileID: 9015774251265855061, guid: dc4f3fb83ec41204585146aecef87a26, type: 3}
+  - {fileID: 8450795300140307056, guid: 0b102170b371cc74d81b92263e99251c, type: 3}
