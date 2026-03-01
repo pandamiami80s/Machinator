@@ -13,15 +13,11 @@ public class WeaponController : MonoBehaviour
     public LayerMask layerMask = 1;
     Vector3 targetPoint;
 
-    public void GetWeapons(List<WeaponSlot> weaponSlots)
-    {
-        allWeaponSlots.AddRange(weaponSlots);
 
-        foreach (WeaponSlot weaponSlot in weaponSlots)
-        {
-            GameObject weapon = Instantiate(WeaponDatabase.Instance.GetRandomWeapon(), weaponSlot.transform);
-            weaponSlot.weapon = weapon.GetComponent<Weapon>();
-        }
+    void Start()
+    {
+        // Player clone will disable moouse
+        Cursor.lockState = CursorLockMode.Confined;
     }
 
     void Update()
@@ -62,6 +58,17 @@ public class WeaponController : MonoBehaviour
         foreach (WeaponSlot weaponSlot in allWeaponSlots)
         {
             weaponSlot.LookAtTarget(targetPoint);
+        }
+    }
+
+    public void GetWeapons(List<WeaponSlot> weaponSlots)
+    {
+        allWeaponSlots.AddRange(weaponSlots);
+
+        foreach (WeaponSlot weaponSlot in weaponSlots)
+        {
+            GameObject weapon = Instantiate(WeaponDatabase.Instance.GetRandomWeapon(), weaponSlot.transform);
+            weaponSlot.weapon = weapon.GetComponent<Weapon>();
         }
     }
 }

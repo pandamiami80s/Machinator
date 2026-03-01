@@ -1,28 +1,19 @@
 using UnityEngine;
 
-//[RequireComponent(typeof(Collider))]
-public class EntityHealth : MonoBehaviour, IDamageable
+/// <summary>
+/// 2026 03 01
+/// </summary>
+public class EntityHealth : MonoBehaviour
 {
     public float health = 100;
-    ///int currentHealth;
 
-
-
-    public void AddGlobalDamage(int amount)
+    public void DecreaseHealth(int damage)
     {
-        health -= amount;
-
-
-        Debug.Log("Health damage taken " + amount);
+        health -= damage;
 
         if (health <= 0)
         {
-            Debug.Log("Health depleted");
+            Destroy(transform.root.gameObject);
         }
-    }
-
-    public void TakeDamage(int amount)
-    {
-        throw new System.NotImplementedException();
     }
 }

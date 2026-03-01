@@ -10,6 +10,7 @@ using UnityEngine;
 
 public class CabCargoController : MonoBehaviour
 {
+    public VehiclePartsController vehiclePartsController;
     string breakableName = "Breakable";
 
     public List<WeaponSlot> weaponSlots = new List<WeaponSlot>();
@@ -42,6 +43,7 @@ public class CabCargoController : MonoBehaviour
                     if (!child.GetComponent<BreakableController>())
                     {
                         BreakableController breakableController = Undo.AddComponent<BreakableController>(child.gameObject);
+                        breakableController.cabCargoController = this;
                         breakableController.SetBreakableParts();
                     }
                 }

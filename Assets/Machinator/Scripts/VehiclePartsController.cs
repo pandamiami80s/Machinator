@@ -40,6 +40,10 @@ public class VehiclePartsController : MonoBehaviour
 
     [System.Serializable] class OnVehiclePartSpawned : UnityEvent<List<WeaponSlot>> { }
     [SerializeField] OnVehiclePartSpawned onVehiclePartSpawned;
+    [System.Serializable] public class OnDamaged : UnityEvent<int> { }
+    public OnDamaged onDamaged;
+
+
 
 
     void Start()
@@ -60,8 +64,10 @@ public class VehiclePartsController : MonoBehaviour
     void SpawnVehiclePart(int partIndex, int index)
     {
         GameObject vehiclePart = Instantiate(vehicleParts[partIndex].prefabs[index], vehicleParts[partIndex].lpTransform);
-        List<WeaponSlot> weaponSlots = vehiclePart.GetComponent<CabCargoController>().weaponSlots;
+        CabCargoController cabCargoController = vehiclePart.GetComponent<CabCargoController>();
+        cabCargoController.vehiclePartsController = this;
 
+        List<WeaponSlot> weaponSlots = cabCargoController.weaponSlots;
         onVehiclePartSpawned.Invoke(weaponSlots);
     }
 
@@ -92,6 +98,7 @@ public class VehiclePartsController : MonoBehaviour
                             if (!childB.GetComponent<CabCargoController>())
                             {
                                 CabCargoController cabCargoController = Undo.AddComponent<CabCargoController>(childB.gameObject);
+                                cabCargoController.vehiclePartsController = this;
                                 cabCargoController.SetCabCargo();
                             }
                         }

@@ -9,6 +9,7 @@ using UnityEngine;
 /// </summary>
 public class BreakableController : MonoBehaviour
 {
+    public CabCargoController cabCargoController;
     public List<GameObject> breakableParts = new List<GameObject>();
     int hitCount;
     int hitCountMax = 3;
@@ -37,8 +38,10 @@ public class BreakableController : MonoBehaviour
         }
     }
 
-    public void DamagePart()
+    public void DamagePart(int damage)
     {
+        cabCargoController.vehiclePartsController.onDamaged.Invoke(damage);
+
         if (breakableParts.Count - 1 <= partIndex)
         {
             return;

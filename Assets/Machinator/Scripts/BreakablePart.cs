@@ -12,6 +12,6 @@ public class BreakablePart : MonoBehaviour, IDamageable
 
     public void TakeDamage(int damage)
     {
-        breakableController.DamagePart();
+        breakableController.DamagePart(damage);
     }
 }

@@ -1331,7 +1331,7 @@ GameObject:
   - component: {fileID: 11431064}
   - component: {fileID: 11430662}
   m_Layer: 9
-  m_Name: Scout RWD
+  m_Name: Scout RWD f
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15340,7 +15340,7 @@ MonoBehaviour:
   solidAxleConnector: 0
   wheel1: {fileID: 0}
   wheel2: {fileID: 0}
---- !u!1 &963919073798523833
+--- !u!1 &1176881206335939607
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -15348,7 +15348,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1512864003956938921}
+  - component: {fileID: 4210656906665666946}
   m_Layer: 0
   m_Name: LP_CAB01 extract
   m_TagString: Untagged
@@ -15356,17 +15356,17 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1512864003956938921
+--- !u!4 &4210656906665666946
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 963919073798523833}
+  m_GameObject: {fileID: 1176881206335939607}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.005571367, y: 0.50120044, z: 0.68552727}
-  m_LocalScale: {x: 1.4285713, y: 1.4285713, z: 1.4285713}
+  m_LocalPosition: {x: -0.0038999578, y: 0.35084036, z: 0.4798692}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8818994958078081289}
@@ -15380,8 +15380,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8818994958078081289}
-  - component: {fileID: 251127558352394207}
-  - component: {fileID: 6006493768271824426}
+  - component: {fileID: 4161375514129084768}
+  - component: {fileID: 1460802899827721303}
+  - component: {fileID: 4017005474120919784}
   m_Layer: 0
   m_Name: VehicleParts
   m_TagString: Untagged
@@ -15402,50 +15403,11 @@ Transform:
   m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1323202290317079745}
-  - {fileID: 1512864003956938921}
+  - {fileID: 6621682800906810193}
+  - {fileID: 4210656906665666946}
   m_Father: {fileID: 460486}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &251127558352394207
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2687633285736461655}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c3ba3eeb4c792742ac610b86bb0fe8a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::VehiclePartsController
-  vehicleParts:
-  - lpName: LP_CAB
-    modelName: cab
-    lpTransform: {fileID: 1512864003956938921}
-    prefabs:
-    - {fileID: 8164249338619982339, guid: 515de82cfa462f5479e3461072f396b3, type: 3}
-    - {fileID: 5339046706831244015, guid: 4a6c76381ab8e3d4f9a5da2134aef71a, type: 3}
-    - {fileID: 2593064564864115147, guid: 4fd7ac4c4083b2948b2fe132be0dca7f, type: 3}
-  - lpName: LP_BSK
-    modelName: cargo
-    lpTransform: {fileID: 0}
-    prefabs: []
-  onVehiclePartSpawned:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6006493768271824426}
-        m_TargetAssemblyTypeName: WeaponController, Assembly-CSharp
-        m_MethodName: GetWeapons
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &6006493768271824426
+--- !u!114 &4161375514129084768
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -15461,7 +15423,74 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 1
---- !u!1 &7161784865864383922
+--- !u!114 &1460802899827721303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2687633285736461655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f4986f24caecd241b196acddeb15082, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EntityHealth
+  health: 100
+--- !u!114 &4017005474120919784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2687633285736461655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c3ba3eeb4c792742ac610b86bb0fe8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VehiclePartsController
+  vehicleParts:
+  - lpName: LP_CAB
+    modelName: cab
+    lpTransform: {fileID: 4210656906665666946}
+    prefabs:
+    - {fileID: 3637564666865562158, guid: 0b8edd30a092de44f98f658545a3fa92, type: 3}
+    - {fileID: 8231070131050464201, guid: c2c335d6be06552428b03603f3a14d46, type: 3}
+    - {fileID: 4987308781294550276, guid: a93f1bf7d60485341b4c7802db2008fd, type: 3}
+  - lpName: LP_BSK
+    modelName: cargo
+    lpTransform: {fileID: 0}
+    prefabs: []
+  onVehiclePartSpawned:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4161375514129084768}
+        m_TargetAssemblyTypeName: WeaponController, Assembly-CSharp
+        m_MethodName: GetWeapons
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onDamaged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1460802899827721303}
+        m_TargetAssemblyTypeName: EntityHealth, Assembly-CSharp
+        m_MethodName: DecreaseHealth
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!1 &4172106486753549923
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -15469,7 +15498,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1323202290317079745}
+  - component: {fileID: 6621682800906810193}
   m_Layer: 0
   m_Name: chassis01 model
   m_TagString: Untagged
@@ -15477,20 +15506,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1323202290317079745
+--- !u!4 &6621682800906810193
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7161784865864383922}
+  m_GameObject: {fileID: 4172106486753549923}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.4285713, y: 1.4285713, z: 1.4285713}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1667327934463275430}
+  - {fileID: 1589736781994150201}
   m_Father: {fileID: 8818994958078081289}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &899590515663049098
@@ -15649,26 +15678,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 56726d3d7ac914b45a76c8027c81483c, type: 3}
   m_PrefabInstance: {fileID: 962655840900958755}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &1200544176466925133
+--- !u!1001 &1262512385388654290
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1323202290317079745}
+    m_TransformParent: {fileID: 6621682800906810193}
     m_Modifications:
-    - target: {fileID: -8679921383154817045, guid: 0d4b7b0faccabbc48a17f50a489b49cc, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 0d4b7b0faccabbc48a17f50a489b49cc, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 0d4b7b0faccabbc48a17f50a489b49cc, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0d4b7b0faccabbc48a17f50a489b49cc, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -15718,10 +15735,10 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0d4b7b0faccabbc48a17f50a489b49cc, type: 3}
---- !u!4 &1667327934463275430 stripped
+--- !u!4 &1589736781994150201 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 0d4b7b0faccabbc48a17f50a489b49cc, type: 3}
-  m_PrefabInstance: {fileID: 1200544176466925133}
+  m_PrefabInstance: {fileID: 1262512385388654290}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6815453504920413379
 PrefabInstance:

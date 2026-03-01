@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Audio;
 
 /// <summary>
 /// 2026 02 07
@@ -26,15 +27,23 @@ public class Weapon : MonoBehaviour
     string[] lpShell = { "LP_SHELL" };
 
     [Header("")]
+    public int shotCount = 1;
+    public float spread = 1.0f;
     // Two times less than irl
     public float roundsPerMinute = 300f;
     float timeBetweenShots;
     float nextFireTime;
+   
+    // Ammo
     public int maxAmmo = 10;
     int currentAmmo;
     public float reloadTime = 2.0f;
     bool isReloading;
 
+    [Header("Effects")]
+    public AudioSource audioSource;
+    public AudioClip audioClip;
+    
 
 
     void Start()
@@ -60,9 +69,16 @@ public class Weapon : MonoBehaviour
 
         if (nextFireTime <= Time.time)
         {
+            audioSource.PlayOneShot(audioClip);
+
             foreach (Transform firePosition in firePositions)
             {
-                Instantiate(bulletPrefab, firePosition.position, firePosition.rotation);
+                for (int i = 0; i < shotCount; i++)
+                {
+                    Vector2 randomRadius = Random.insideUnitCircle * spread;
+                    Quaternion randomSpread = Quaternion.Euler(randomRadius.x, randomRadius.y, 0);
+                    Instantiate(bulletPrefab, firePosition.position, firePosition.rotation * randomSpread);
+                }
             }
 
             currentAmmo--;
@@ -80,7 +96,7 @@ public class Weapon : MonoBehaviour
 
     IEnumerator IEReload()
     {
-        Debug.Log("Reloading " + transform.gameObject.name);
+        //Debug.Log("Reloading " + transform.gameObject.name);
         isReloading = true;
 
         yield return new WaitForSeconds(reloadTime);
