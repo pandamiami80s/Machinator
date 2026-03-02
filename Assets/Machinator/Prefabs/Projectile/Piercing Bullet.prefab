@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5730345523137473642}
   - component: {fileID: 8480920736840144198}
   m_Layer: 0
-  m_Name: Machinegun
+  m_Name: Piercing Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,12 +46,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 941202af856158f4682c9ca04c943eaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RaycastType
-  range: 100
-  damage: 10
+  range: 150
+  damage: 15
   hitLayerMask:
     serializedVersion: 2
     m_Bits: 1
-  isPiercing: 0
+  isPiercing: 1
   maxBounce: 0
   bounceLayerMask:
     serializedVersion: 2
@@ -145,7 +145,7 @@ LineRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 1, b: 0, a: 0.5019608}
+      key0: {r: 1, g: 0, b: 0, a: 0.5019608}
       key1: {r: 1, g: 1, b: 1, a: 0}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}

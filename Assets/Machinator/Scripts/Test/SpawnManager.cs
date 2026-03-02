@@ -34,7 +34,7 @@ public class SpawnManager : MonoBehaviour
 
             Vector3 pos = spawnPointContainer.position + new Vector3(x, 2.0f, z);
 
-            GameObject go = new GameObject("SpawnPoint_" + i);
+            GameObject go = new GameObject("SpawnPoint " + i);
             go.transform.position = pos;
             go.transform.parent = spawnPointContainer;
 
@@ -48,10 +48,5 @@ public class SpawnManager : MonoBehaviour
             enemy.GetComponent<RVP.FollowAI>().target = player.transform;
             enemy.GetComponent<TargetAI>().target = player.transform;
         }
-    }
-
-    void Update()
-    {
-        
     }
 }

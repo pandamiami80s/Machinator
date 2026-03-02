@@ -78,6 +78,11 @@ public class Weapon : MonoBehaviour
                     Vector2 randomRadius = Random.insideUnitCircle * spread;
                     Quaternion randomSpread = Quaternion.Euler(randomRadius.x, randomRadius.y, 0);
                     Instantiate(bulletPrefab, firePosition.position, firePosition.rotation * randomSpread);
+                    // Set as parent to remove delayed effect
+                    //if (bullet.GetComponent<LineDrawer>())
+                    //{
+                    //    bullet.transform.SetParent(firePosition);
+                    //}
                 }
             }
 

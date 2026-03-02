@@ -406,7 +406,7 @@ MonoBehaviour:
   - {fileID: 2077109874906441538}
   - {fileID: 8167576546420608454}
   - {fileID: 7032954298943482660}
-  bulletPrefab: {fileID: 2882195351469647715, guid: cc310a6cab95b6f44b95c23476a359e4, type: 3}
+  bulletPrefab: {fileID: 2882195351469647715, guid: 5e675804c0b99114a8cbd4df8c6a2e55, type: 3}
   shellPositions:
   - {fileID: 4395284358096519014}
   - {fileID: 4373251604710123158}

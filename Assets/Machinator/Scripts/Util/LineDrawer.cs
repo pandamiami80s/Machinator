@@ -17,8 +17,17 @@ public class LineDrawer : MonoBehaviour
 
     IEnumerator IEDrawLine(Vector3[] path, float time)
     {
+        //lineRenderer.useWorldSpace = false;
         lineRenderer.positionCount = path.Length;
         lineRenderer.SetPositions(path);
+
+        // Recalcualte positions
+        //Vector3[] localPath = new Vector3[path.Length];
+        //for (int i = 0; i < localPath.Length; i++)
+        //{
+        //    localPath[i] = transform.InverseTransformPoint(path[i]);
+        //}
+        //lineRenderer.SetPositions(localPath);
 
         yield return new WaitForSeconds(time);
 

@@ -79,7 +79,7 @@ namespace RVP
                 targetIsWaypoint = target.GetComponent<VehicleWaypoint>();
                 // Can I see the target?
                 targetVisible = !Physics.Linecast(tr.position, target.position, viewBlockMask);
-                Debug.Log(targetVisible);
+                
                 if (targetVisible || targetIsWaypoint) {
                     targetPoint = targetBody ? target.position + targetBody.linearVelocity : target.position;
                 }

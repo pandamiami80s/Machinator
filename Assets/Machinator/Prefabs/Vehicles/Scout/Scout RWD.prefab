@@ -1621,6 +1621,7 @@ MonoBehaviour:
   accelAxis: Accel
   brakeAxis: Brake
   steerAxis: Horizontal
+  transmission: {fileID: 11439102}
   wc: {fileID: 4161375514129084768}
   distance: 100
   layerMask:
@@ -15469,7 +15470,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f4986f24caecd241b196acddeb15082, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EntityHealth
-  health: 100000
+  health: 1000
 --- !u!114 &4017005474120919784
 MonoBehaviour:
   m_ObjectHideFlags: 0
