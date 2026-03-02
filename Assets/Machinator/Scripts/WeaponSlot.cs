@@ -16,7 +16,7 @@ public class WeaponSlot : MonoBehaviour
     public float maxX = 15.0f;
     Vector2 currentAngles;
     public float rotationSpeed = 90f;
-    float gizmoDrawDistance = 2.0f;
+    float gizmoDrawDistance = 0.75f;
 
 
 
@@ -84,27 +84,27 @@ public class WeaponSlot : MonoBehaviour
             color = Color.green;
         }
 
-        Vector3 forward = Vector3.forward;
+        Vector3 forward = transform.forward;
         if (isRearMounted)
         {
-            forward = -Vector3.forward;
+            forward = -transform.forward;
         }
 
         Gizmos.color = color;
         Handles.color = color;
 
-        Vector3 direction = Quaternion.AngleAxis(minY, Vector3.up) * forward;
-        Vector3 directionB = Quaternion.AngleAxis(maxY, Vector3.up) * forward;
+        Vector3 direction = Quaternion.AngleAxis(minY, transform.up) * forward;
+        Vector3 directionB = Quaternion.AngleAxis(maxY, transform.up) * forward;
         Gizmos.DrawRay(transform.position, direction * gizmoDrawDistance);
         Gizmos.DrawRay(transform.position, directionB * gizmoDrawDistance);
 
-        Handles.DrawWireArc(transform.position, Vector3.up, direction, totalAngle, gizmoDrawDistance);
+        Handles.DrawWireArc(transform.position, transform.up, direction, totalAngle, gizmoDrawDistance);
         Handles.color = color * new Color(1, 1, 1, 0.1f);
-        Handles.DrawSolidArc(transform.position, Vector3.up, direction, totalAngle, gizmoDrawDistance);
+        Handles.DrawSolidArc(transform.position, transform.up, direction, totalAngle, gizmoDrawDistance);
 
         Gizmos.color = Color.yellow;
         float bisectorAngle = (minY + maxY) / 2f;
-        Vector3 bisectorDir = Quaternion.AngleAxis(bisectorAngle, Vector3.up) * forward;
+        Vector3 bisectorDir = Quaternion.AngleAxis(bisectorAngle, transform.up) * forward;
         Gizmos.DrawRay(transform.position, bisectorDir * gizmoDrawDistance);
     }
 }

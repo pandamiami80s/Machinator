@@ -1328,10 +1328,12 @@ GameObject:
   - component: {fileID: 11486496}
   - component: {fileID: 5402310}
   - component: {fileID: 11420624}
-  - component: {fileID: 11431064}
   - component: {fileID: 11430662}
+  - component: {fileID: 8495299449076332222}
+  - component: {fileID: 1611459336861523415}
+  - component: {fileID: 2173286203884544594}
   m_Layer: 9
-  m_Name: Scout RWD f
+  m_Name: Scout RWD
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1565,28 +1567,6 @@ MonoBehaviour:
   detectJump: 1
   detectFlips: 1
   engine: {fileID: 11427272}
---- !u!114 &11431064
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 127608}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf92e57a9edd9af4caa9b9985e3a1453, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  accelAxis: Accel
-  brakeAxis: Brake
-  steerAxis: Horizontal
-  ebrakeAxis: Ebrake
-  boostButton: Boost
-  upshiftButton: Upshift
-  downshiftButton: Downshift
-  pitchAxis: Vertical
-  yawAxis: Spin
-  rollAxis: Horizontal
 --- !u!114 &11430662
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1602,6 +1582,64 @@ MonoBehaviour:
   spawnPos: {x: 0, y: 5, z: 4}
   spawnRot: {x: -1, y: 0, z: 0}
   fallLimit: -10
+--- !u!114 &8495299449076332222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 127608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9e79fd276225c249ba662e7605e2068, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RVP.FollowAI
+  target: {fileID: 0}
+  followDistance: 0
+  speed: 1
+  targetVelocity: -1
+  viewBlockMask:
+    serializedVersion: 2
+    m_Bits: 0
+  stopTimeReverse: 1
+  reverseAttemptTime: 1
+  resetReverseCount: 1
+  rollResetTime: 3
+--- !u!114 &1611459336861523415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 127608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29fffae16ff181044a7b72658820e2fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInput
+  vp: {fileID: 11400434}
+  accelAxis: Accel
+  brakeAxis: Brake
+  steerAxis: Horizontal
+  wc: {fileID: 4161375514129084768}
+  distance: 100
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 1
+--- !u!114 &2173286203884544594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 127608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d3078fcacad9354eafe66ba3397c5b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TargetAI
+  wp: {fileID: 4161375514129084768}
+  target: {fileID: 0}
 --- !u!1 &128396
 GameObject:
   m_ObjectHideFlags: 0
@@ -7551,7 +7589,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &408368
 Transform:
   m_ObjectHideFlags: 0
@@ -8062,7 +8100,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &464878
 Transform:
   m_ObjectHideFlags: 0
@@ -14661,7 +14699,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &434954
 Transform:
   m_ObjectHideFlags: 0
@@ -14958,7 +14996,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &456428
 Transform:
   m_ObjectHideFlags: 0
@@ -15419,10 +15457,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d46661db470206489ee7f15a8e5780a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeaponController
-  distance: 100
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 1
 --- !u!114 &1460802899827721303
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15435,7 +15469,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f4986f24caecd241b196acddeb15082, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EntityHealth
-  health: 100
+  health: 100000
 --- !u!114 &4017005474120919784
 MonoBehaviour:
   m_ObjectHideFlags: 0

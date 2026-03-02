@@ -219,7 +219,7 @@ MonoBehaviour:
   spread: 1
   roundsPerMinute: 200
   maxAmmo: 80
-  reloadTime: 2
+  reloadTime: 1
   audioSource: {fileID: 7839025019358100807}
   audioClip: {fileID: 8300000, guid: 0948d6e0907422548b532ef92b8e027b, type: 3}
 --- !u!82 &7839025019358100807

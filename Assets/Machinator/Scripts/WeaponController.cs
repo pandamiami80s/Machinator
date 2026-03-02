@@ -7,23 +7,16 @@ using UnityEngine;
 public class WeaponController : MonoBehaviour
 {
     List<WeaponSlot> allWeaponSlots = new List<WeaponSlot>();
+    bool isFiring;
+    bool isReloading;
+    bool isTargeting;
+    Vector3 position;
 
-    [Header("Weapons")]
-    public float distance = 100.0f;
-    public LayerMask layerMask = 1;
-    Vector3 targetPoint;
-
-
-    void Start()
-    {
-        // Player clone will disable moouse
-        Cursor.lockState = CursorLockMode.Confined;
-    }
 
     void Update()
     {
         // Fire
-        if (Input.GetMouseButton(0))
+        if (isFiring)
         {
             foreach (WeaponSlot weaponSlot in allWeaponSlots)
             {
@@ -32,33 +25,37 @@ public class WeaponController : MonoBehaviour
         }
 
         // Reload
-        if (Input.GetMouseButtonDown(1))
+        if (isReloading)
         {
             foreach (WeaponSlot weaponSlot in allWeaponSlots)
             {
                 weaponSlot.weapon.Reload();
             }
         }
+
+        if (isTargeting)
+        {
+            foreach (WeaponSlot weaponSlot in allWeaponSlots)
+            {
+                weaponSlot.LookAtTarget(position);
+            }
+        }
     }
 
-    void FixedUpdate()
+    public void SetFiring(bool value)
     {
-        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
-        if (Physics.Raycast(ray, out RaycastHit hit, distance, layerMask))
-        {
-            targetPoint = hit.point;
-        }
-        else
-        {
-            // Prevent loosing target when shooting at long distance / or sky
-            targetPoint = ray.GetPoint(distance);
-        }
-        Debug.DrawLine(ray.origin, targetPoint, Color.red);
+        isFiring = value;
+    }
 
-        foreach (WeaponSlot weaponSlot in allWeaponSlots)
-        {
-            weaponSlot.LookAtTarget(targetPoint);
-        }
+    public void SetReloading(bool value)
+    {
+        isReloading = value;
+    }
+
+    public void SetTarget(bool value, Vector3 newPosition)
+    {
+        isTargeting = value;
+        position = newPosition;
     }
 
     public void GetWeapons(List<WeaponSlot> weaponSlots)
