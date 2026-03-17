@@ -13,16 +13,18 @@ public class SpawnManager : MonoBehaviour
     float spawnRadius = 100.0f;
     List<Transform> spawnPoints = new List<Transform>();
 
+    public WorldGenerator worldGenerator;
 
 
 
     void Start()
     {
         // Spawn player
-        GameObject player = Instantiate(playerPrefab, new Vector3(0, 2, 0), Quaternion.identity);
+        GameObject player = Instantiate(playerPrefab, new Vector3(0, 16, 0), Quaternion.identity);
         player.GetComponent<RVP.FollowAI>().enabled = false;
         player.GetComponent<TargetAI>().enabled = false;
         camera.Follow = player.transform;
+        worldGenerator.player = player.transform;
 
         // Spawn enemies
         //return;

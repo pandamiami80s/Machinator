@@ -48,7 +48,7 @@ public class PlayerInput : MonoBehaviour
         // mph 2.23694f
         string speed = (vp.velMag * 3.6f).ToString("0") + " KM/H";
         string gear = "Gear: " + (transmission.currentGear == 0 ? "R" : (transmission.currentGear == 1 ? "N" : (transmission.currentGear - 1).ToString()));
-        Debug.Log(speed + " " + gear);
+        //Debug.Log(speed + " " + gear);
     }
 
     void Update()
